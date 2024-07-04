@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import './mainContent.scss';
 
 class MainContent extends Component {
   render() {
