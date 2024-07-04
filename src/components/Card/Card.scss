@@ -1,0 +1,22 @@
+p {
+  margin: 0;
+}
+
+.char {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  border-radius: 15px;
+  background: #ffe388;
+
+  &_name {
+    margin: 0;
+  }
+
+  &_img {
+    width: 100%;
+    border-radius: 10px;
+  }
+}

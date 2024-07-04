@@ -15,7 +15,7 @@ class App extends Component {
   }
 }
 
-fetchData(1, 5)
+fetchData(1, 6, 'naru')
   .then((data) => console.log(data))
   .catch((error) => console.error(error));
 
