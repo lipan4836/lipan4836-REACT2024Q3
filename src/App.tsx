@@ -34,7 +34,7 @@ class App extends Component<Record<string, never>, AppState> {
   }
 
   render() {
-    const { searchQuery } = this.state;
+    const { searchQuery, triggerSearch } = this.state;
 
     return (
       <>
@@ -45,7 +45,7 @@ class App extends Component<Record<string, never>, AppState> {
         />
         <MainContent
           searchQuery={searchQuery}
-          triggerSearch={this.state.triggerSearch}
+          triggerSearch={triggerSearch}
           resetTriggerSearch={this.resetTriggerSearch}
         />
       </>

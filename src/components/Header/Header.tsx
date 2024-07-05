@@ -10,14 +10,16 @@ interface HeaderProps {
 
 class Header extends Component<HeaderProps> {
   render() {
+    const { setSearchQuery, searchQuery, onSearch } = this.props;
+
     return (
       <header className="header">
         <div className="headerCont">
           <h1 className="h1">naruto characters base</h1>
           <SearchBlock
-            setSearchQuery={this.props.setSearchQuery}
-            searchQuery={this.props.searchQuery}
-            onSearch={this.props.onSearch}
+            setSearchQuery={setSearchQuery}
+            searchQuery={searchQuery}
+            onSearch={onSearch}
           />
         </div>
       </header>

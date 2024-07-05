@@ -33,7 +33,7 @@ class MainContent extends Component<MainContentProps, MainContentState> {
   async componentDidUpdate(prevProps: MainContentProps): Promise<void> {
     if (prevProps.triggerSearch !== this.props.triggerSearch && this.props.triggerSearch) {
       await this.loadCharacters();
-      
+
       this.props.resetTriggerSearch();
     }
   }

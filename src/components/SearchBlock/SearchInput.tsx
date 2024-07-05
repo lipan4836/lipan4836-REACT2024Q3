@@ -12,8 +12,9 @@ class SearchInput extends Component<SearchInputProps> {
     this.props.setSearchQuery(event.target.value);
   };
 
-  handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
+      this.props.setSearchQuery(event.currentTarget.value);
       this.props.onSearch();
     }
   };
@@ -25,7 +26,7 @@ class SearchInput extends Component<SearchInputProps> {
         className="searchBlock_input"
         value={this.props.searchQuery}
         onChange={this.handleChange}
-        onKeyPress={this.handleKeyPress}
+        onKeyDown={this.handleKeyDown}
       />
     );
   }

@@ -11,14 +11,15 @@ interface SearchBlockProps {
 
 class SearchBlock extends Component<SearchBlockProps> {
   render() {
+    const { onSearch, setSearchQuery, searchQuery } = this.props;
     return (
       <div className="searchBlock">
         <SearchInput
-          setSearchQuery={this.props.setSearchQuery}
-          searchQuery={this.props.searchQuery}
-          onSearch={this.props.onSearch}
+          setSearchQuery={setSearchQuery}
+          searchQuery={searchQuery}
+          onSearch={onSearch}
         />
-        <SearchBtn onClick={this.props.onSearch} />
+        <SearchBtn onClick={onSearch} />
       </div>
     );
   }

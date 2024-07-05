@@ -6,8 +6,8 @@ interface SearchBtnProps {
 }
 
 class SearchBtn extends Component<SearchBtnProps> {
-  handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    console.log(event.target)
+  handleClick = () => {
+    this.props.onClick();
   };
 
   render() {
