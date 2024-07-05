@@ -10,8 +10,14 @@ interface MainContentState {
   error: string | null;
 }
 
-class MainContent extends Component<Record<string, never>, MainContentState> {
-  constructor(props: Record<string, never>) {
+interface MainContentProps {
+  searchQuery: string;
+  triggerSearch: boolean;
+  resetTriggerSearch: () => void;
+}
+
+class MainContent extends Component<MainContentProps, MainContentState> {
+  constructor(props: MainContentProps) {
     super(props);
     this.state = {
       characters: [],
@@ -21,8 +27,24 @@ class MainContent extends Component<Record<string, never>, MainContentState> {
   }
 
   async componentDidMount(): Promise<void> {
+    this.loadCharacters();
+  }
+
+  async componentDidUpdate(prevProps: MainContentProps): Promise<void> {
+    if (prevProps.triggerSearch !== this.props.triggerSearch && this.props.triggerSearch) {
+      await this.loadCharacters();
+      
+      this.props.resetTriggerSearch();
+    }
+  }
+
+  async loadCharacters(): Promise<void> {
+    const { searchQuery } = this.props;
+
+    this.setState({ loading: true, error: null });
+
     try {
-      const response: CharacterResponse = await fetchData(1, 6);
+      const response: CharacterResponse = await fetchData(1, 6, searchQuery);
       this.setState({ characters: response.characters, loading: false });
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
