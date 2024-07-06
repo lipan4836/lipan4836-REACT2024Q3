@@ -1,7 +1,21 @@
 .mainWrap {
+  max-width: 1280px;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   gap: 32px;
   padding: 32px;
+
+  @media (max-width: 819px) {
+    flex-direction: column;
+    flex-wrap: nowrap;
+  }
+
+  @media (max-width: 450px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 402px) {
+    padding: 8px;
+  }
 }

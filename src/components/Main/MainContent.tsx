@@ -3,6 +3,8 @@ import './mainContent.scss';
 import { Character, CharacterResponse } from '../../types/characterResponse';
 import fetchData from '../../api/api';
 import Card from '../Card/Card';
+import Loader from '../Loader/Loader';
+import NotFoundChar from '../NotFoundChar/NotFoundChar';
 
 interface MainContentState {
   characters: Character[];
@@ -56,7 +58,7 @@ class MainContent extends Component<MainContentProps, MainContentState> {
     const { characters, loading, error } = this.state;
 
     if (loading) {
-      return <div>Loading...</div>;
+      return <Loader />;
     }
 
     if (error) {
@@ -64,12 +66,16 @@ class MainContent extends Component<MainContentProps, MainContentState> {
     }
 
     return (
-      <main>
-        <div className="mainWrap">
-          {characters.map((character) => (
-            <Card key={character.id} character={character} />
-          ))}
-        </div>
+      <main className="main">
+        {characters.length > 0 ? (
+          <div className="mainWrap">
+            {characters.map((character) => (
+              <Card key={character.id} character={character} />
+            ))}
+          </div>
+        ) : (
+          <NotFoundChar />
+        )}
       </main>
     );
   }
