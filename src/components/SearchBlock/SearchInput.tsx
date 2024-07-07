@@ -9,12 +9,14 @@ interface SearchInputProps {
 
 class SearchInput extends Component<SearchInputProps> {
   handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    this.props.setSearchQuery(event.target.value);
+    const trimmedValue = event.target.value.trim();
+    this.props.setSearchQuery(trimmedValue);
   };
 
   handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      this.props.setSearchQuery(event.currentTarget.value);
+      const trimmedValue = event.currentTarget.value.trim();
+      this.props.setSearchQuery(trimmedValue);
       this.props.onSearch();
     }
   };
