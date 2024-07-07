@@ -15,7 +15,6 @@ class Card extends Component<CardProps, Record<string, never>> {
       <div className="char">
         <h2 className="char_name">{name}</h2>
         {images.length ? <img src={images[0]} alt={name} className="char_img" /> : <NoPhoto />}
-        {/* <img src={images[0]} alt={name} className="char_img" /> */}
         <div className="char_personal">
           {personal.birthdate && (
             <div className="char_personal_box">
