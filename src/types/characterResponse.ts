@@ -40,7 +40,7 @@ interface Family {
   daughter?: string;
   husband?: string;
   adoptiveSon?: string;
-  [key: string]: string | undefined; // для поддержания гибкости интерфейса
+  [key: string]: string | undefined;
 }
 
 interface Personal {

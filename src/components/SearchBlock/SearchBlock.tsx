@@ -2,6 +2,7 @@ import { Component } from 'react';
 import SearchInput from './SearchInput';
 import './SearchBlock.scss';
 import SearchBtn from './SearchBtn';
+import ErrorSimBtn from '../ErrorBoundary/ErrorSimBtn';
 
 interface SearchBlockProps {
   setSearchQuery: (query: string) => void;
@@ -20,6 +21,7 @@ class SearchBlock extends Component<SearchBlockProps> {
           onSearch={onSearch}
         />
         <SearchBtn onClick={onSearch} />
+        <ErrorSimBtn />
       </div>
     );
   }
