@@ -1,4 +1,5 @@
 import { Component } from 'react';
+import './ErrorContent.scss';
 
 class ErrorSimBtn extends Component<Record<string, never>, { simError: boolean }> {
   constructor(props: Record<string, never>) {
@@ -18,7 +19,7 @@ class ErrorSimBtn extends Component<Record<string, never>, { simError: boolean }
 
     return (
       <button className="simErrorBtn" onClick={this.simulateError}>
-        Simulate error
+        Crush!
       </button>
     );
   }
