@@ -6,16 +6,23 @@ import './index.scss';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import ErrorContent from './components/ErrorBoundary/ErrorContent.tsx';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage.tsx';
+import MainContent from './components/Main/MainContent.tsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     errorElement: <ErrorContent error={null} errorInfo={null} />,
-  },
-  {
-    path: '*',
-    element: <NotFoundPage />,
+    children: [
+      {
+        path: '/',
+        element: <MainContent />,
+      },
+      {
+        path: '*',
+        element: <NotFoundPage />,
+      },
+    ],
   },
 ]);
 

@@ -1,23 +1,17 @@
 import { ChangeEvent } from 'react';
 import './SearchBlock.scss';
+import useAppContext from '../AppContext/useAppContext';
 
-interface SearchInputProps {
-  setSearchQuery: (query: string) => void;
-  searchQuery: string;
-  onSearch: () => void;
-}
+function SearchInput() {
+  const { setSearchQuery, searchQuery, handleSearch } = useAppContext();
 
-function SearchInput({ setSearchQuery, searchQuery, onSearch }: SearchInputProps) {
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const trimmedValue = event.target.value.trim();
-    setSearchQuery(trimmedValue);
+    setSearchQuery(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      const trimmedValue = event.currentTarget.value.trim();
-      setSearchQuery(trimmedValue);
-      onSearch();
+      handleSearch();
     }
   };
 

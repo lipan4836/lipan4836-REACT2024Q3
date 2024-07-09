@@ -5,14 +5,10 @@ import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
 import { useCallback, useEffect, useState } from 'react';
+import useAppContext from '../AppContext/useAppContext';
 
-interface MainContentProps {
-  searchQuery: string;
-  triggerSearch: boolean;
-  resetTriggerSearch: () => void;
-}
-
-function MainContent({ searchQuery, triggerSearch, resetTriggerSearch }: MainContentProps) {
+function MainContent() {
+  const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +20,10 @@ function MainContent({ searchQuery, triggerSearch, resetTriggerSearch }: MainCon
     try {
       const response: CharacterResponse = await fetchData(1, 6, searchQuery);
       setCharacters(response.characters);
-      setLoading(false);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       setError(errorMessage);
+    } finally {
       setLoading(false);
     }
   }, [searchQuery]);

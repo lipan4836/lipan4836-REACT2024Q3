@@ -1,12 +1,11 @@
 import searchLogo from '../../assets/svg/btn-search.svg';
+import useAppContext from '../AppContext/useAppContext';
 
-interface SearchBtnProps {
-  onClick: () => void;
-}
+function SearchBtn() {
+  const { handleSearch } = useAppContext();
 
-function SearchBtn({ onClick }: SearchBtnProps) {
   return (
-    <button className="searchBlock_btn" onClick={onClick}>
+    <button className="searchBlock_btn" onClick={handleSearch}>
       <img src={searchLogo} alt="search" className="searchBlock_btn__img" />
     </button>
   );
