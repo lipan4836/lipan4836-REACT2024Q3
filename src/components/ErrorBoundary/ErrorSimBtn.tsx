@@ -1,28 +1,22 @@
-import { Component } from 'react';
+import { useCallback, useState } from 'react';
 import './ErrorContent.scss';
 
-class ErrorSimBtn extends Component<Record<string, never>, { simError: boolean }> {
-  constructor(props: Record<string, never>) {
-    super(props);
-    this.state = { simError: false };
-    this.simulateError = this.simulateError.bind(this);
+function ErrorSimBtn() {
+  const [simError, setSimError] = useState<boolean>(false);
+
+  const simulateError = useCallback(() => {
+    setSimError(true);
+  }, []);
+
+  if (simError) {
+    throw new Error('Simulate error');
   }
 
-  simulateError() {
-    this.setState({ simError: true });
-  }
-
-  render() {
-    if (this.state.simError) {
-      throw new Error('Simulate error');
-    }
-
-    return (
-      <button className="simErrorBtn" onClick={this.simulateError}>
-        Crush!
-      </button>
-    );
-  }
+  return (
+    <button className="simErrorBtn" onClick={simulateError}>
+      Crush!
+    </button>
+  );
 }
 
 export default ErrorSimBtn;

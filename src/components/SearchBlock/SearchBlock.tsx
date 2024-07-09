@@ -1,4 +1,3 @@
-import { Component } from 'react';
 import SearchInput from './SearchInput';
 import './SearchBlock.scss';
 import SearchBtn from './SearchBtn';
@@ -10,21 +9,14 @@ interface SearchBlockProps {
   onSearch: () => void;
 }
 
-class SearchBlock extends Component<SearchBlockProps> {
-  render() {
-    const { onSearch, setSearchQuery, searchQuery } = this.props;
-    return (
-      <div className="searchBlock">
-        <SearchInput
-          setSearchQuery={setSearchQuery}
-          searchQuery={searchQuery}
-          onSearch={onSearch}
-        />
-        <SearchBtn onClick={onSearch} />
-        <ErrorSimBtn />
-      </div>
-    );
-  }
+function SearchBlock({ onSearch, setSearchQuery, searchQuery }: SearchBlockProps) {
+  return (
+    <div className="searchBlock">
+      <SearchInput setSearchQuery={setSearchQuery} searchQuery={searchQuery} onSearch={onSearch} />
+      <SearchBtn onClick={onSearch} />
+      <ErrorSimBtn />
+    </div>
+  );
 }
 
 export default SearchBlock;

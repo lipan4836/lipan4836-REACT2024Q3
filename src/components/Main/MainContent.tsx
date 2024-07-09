@@ -1,16 +1,10 @@
-import { Component } from 'react';
 import './mainContent.scss';
 import { Character, CharacterResponse } from '../../types/characterResponse';
 import fetchData from '../../api/api';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
-
-interface MainContentState {
-  characters: Character[];
-  loading: boolean;
-  error: string | null;
-}
+import { useCallback, useEffect, useState } from 'react';
 
 interface MainContentProps {
   searchQuery: string;
@@ -18,67 +12,57 @@ interface MainContentProps {
   resetTriggerSearch: () => void;
 }
 
-class MainContent extends Component<MainContentProps, MainContentState> {
-  constructor(props: MainContentProps) {
-    super(props);
-    this.state = {
-      characters: [],
-      loading: true,
-      error: null,
-    };
-  }
+function MainContent({ searchQuery, triggerSearch, resetTriggerSearch }: MainContentProps) {
+  const [characters, setCharacters] = useState<Character[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  async componentDidMount(): Promise<void> {
-    this.loadCharacters();
-  }
-
-  async componentDidUpdate(prevProps: MainContentProps): Promise<void> {
-    if (prevProps.triggerSearch !== this.props.triggerSearch && this.props.triggerSearch) {
-      await this.loadCharacters();
-
-      this.props.resetTriggerSearch();
-    }
-  }
-
-  async loadCharacters(): Promise<void> {
-    const { searchQuery } = this.props;
-
-    this.setState({ loading: true, error: null });
+  const loadCharacters = useCallback(async () => {
+    setLoading(true);
+    setError(null);
 
     try {
       const response: CharacterResponse = await fetchData(1, 6, searchQuery);
-      this.setState({ characters: response.characters, loading: false });
+      setCharacters(response.characters);
+      setLoading(false);
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      this.setState({ error: errorMessage, loading: false });
+      setError(errorMessage);
+      setLoading(false);
     }
+  }, [searchQuery]);
+
+  useEffect(() => {
+    loadCharacters();
+  }, [loadCharacters]);
+
+  useEffect(() => {
+    if (triggerSearch) {
+      loadCharacters().then(resetTriggerSearch);
+    }
+  }, [triggerSearch, loadCharacters, resetTriggerSearch]);
+
+  if (loading) {
+    return <Loader />;
   }
 
-  render() {
-    const { characters, loading, error } = this.state;
-
-    if (loading) {
-      return <Loader />;
-    }
-
-    if (error) {
-      return <div>Error: {error}</div>;
-    }
-
-    return (
-      <main className="main">
-        {characters.length > 0 ? (
-          <div className="mainWrap">
-            {characters.map((character) => (
-              <Card key={character.id} character={character} />
-            ))}
-          </div>
-        ) : (
-          <NotFoundChar />
-        )}
-      </main>
-    );
+  if (error) {
+    return <div>Error: {error}</div>;
   }
+
+  return (
+    <main className="main">
+      {characters.length > 0 ? (
+        <div className="mainWrap">
+          {characters.map((character) => (
+            <Card key={character.id} character={character} />
+          ))}
+        </div>
+      ) : (
+        <NotFoundChar />
+      )}
+    </main>
+  );
 }
 
 export default MainContent;

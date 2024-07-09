@@ -1,55 +1,35 @@
-import { Component } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Header from './components/Header/Header';
 import MainContent from './components/Main/MainContent';
 
-interface AppState {
-  searchQuery: string;
-  triggerSearch: boolean;
-}
+function App() {
+  const [searchQuery, setSearchQuery] = useState<string>(
+    () => localStorage.getItem('searchQuery') || '',
+  );
+  const [triggerSearch, setTriggerSearch] = useState<boolean>(false);
 
-class App extends Component<Record<string, never>, AppState> {
-  constructor(props: Record<string, never>) {
-    super(props);
-    this.state = {
-      searchQuery: localStorage.getItem('searchQuery') || '',
-      triggerSearch: false,
-    };
-    this.setSearchQuery = this.setSearchQuery.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
-    this.resetTriggerSearch = this.resetTriggerSearch.bind(this);
-  }
+  const handleSearch = useCallback(() => {
+    setTriggerSearch(true);
+  }, []);
 
-  setSearchQuery(query: string) {
-    this.setState({ searchQuery: query });
-    localStorage.setItem('searchQuery', query);
-  }
+  const resetTriggerSearch = useCallback(() => {
+    setTriggerSearch(false);
+  }, []);
 
-  handleSearch() {
-    this.setState({ triggerSearch: true });
-  }
+  useEffect(() => {
+    localStorage.setItem('searchQuery', searchQuery);
+  }, [searchQuery]);
 
-  resetTriggerSearch() {
-    this.setState({ triggerSearch: false });
-  }
-
-  render() {
-    const { searchQuery, triggerSearch } = this.state;
-
-    return (
-      <>
-        <Header
-          setSearchQuery={this.setSearchQuery}
-          searchQuery={searchQuery}
-          onSearch={this.handleSearch}
-        />
-        <MainContent
-          searchQuery={searchQuery}
-          triggerSearch={triggerSearch}
-          resetTriggerSearch={this.resetTriggerSearch}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <Header setSearchQuery={setSearchQuery} searchQuery={searchQuery} onSearch={handleSearch} />
+      <MainContent
+        searchQuery={searchQuery}
+        triggerSearch={triggerSearch}
+        resetTriggerSearch={resetTriggerSearch}
+      />
+    </>
+  );
 }
 
 export default App;

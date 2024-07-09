@@ -1,4 +1,4 @@
-import { ChangeEvent, Component } from 'react';
+import { ChangeEvent } from 'react';
 import './SearchBlock.scss';
 
 interface SearchInputProps {
@@ -7,31 +7,29 @@ interface SearchInputProps {
   onSearch: () => void;
 }
 
-class SearchInput extends Component<SearchInputProps> {
-  handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+function SearchInput({ setSearchQuery, searchQuery, onSearch }: SearchInputProps) {
+  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const trimmedValue = event.target.value.trim();
-    this.props.setSearchQuery(trimmedValue);
+    setSearchQuery(trimmedValue);
   };
 
-  handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
       const trimmedValue = event.currentTarget.value.trim();
-      this.props.setSearchQuery(trimmedValue);
-      this.props.onSearch();
+      setSearchQuery(trimmedValue);
+      onSearch();
     }
   };
 
-  render() {
-    return (
-      <input
-        type="search"
-        className="searchBlock_input"
-        value={this.props.searchQuery}
-        onChange={this.handleChange}
-        onKeyDown={this.handleKeyDown}
-      />
-    );
-  }
+  return (
+    <input
+      type="search"
+      className="searchBlock_input"
+      value={searchQuery}
+      onChange={handleChange}
+      onKeyDown={handleKeyDown}
+    />
+  );
 }
 
 export default SearchInput;
