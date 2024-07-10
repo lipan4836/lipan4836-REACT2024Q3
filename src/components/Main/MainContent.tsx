@@ -6,12 +6,18 @@ import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
 import { useCallback, useEffect, useState } from 'react';
 import useAppContext from '../AppContext/useAppContext';
+import { useSearchParams } from 'react-router-dom';
+import Pagination from '../Pagination/Pagination';
 
 function MainContent() {
   const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [totalPages, setTotalPages] = useState<number>(1);
+  const [searchParams] = useSearchParams();
+  const page = parseInt(searchParams.get('page') || '1', 10);
+  const limit = 6;
 
   const loadCharacters = useCallback(async () => {
     console.log('loadCharacters called with query:', searchQuery);
@@ -19,19 +25,20 @@ function MainContent() {
     setError(null);
 
     try {
-      const response: CharacterResponse = await fetchData(1, 6, searchQuery);
+      const response: CharacterResponse = await fetchData(page, limit, searchQuery);
       setCharacters(response.characters);
+      setTotalPages(Math.floor(response.total / response.pageSize));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [searchQuery]);
+  }, [page, searchQuery]);
 
-  // useEffect(() => {
-  //   loadCharacters();
-  // }, [loadCharacters]);
+  useEffect(() => {
+    loadCharacters();
+  }, [loadCharacters]);
 
   useEffect(() => {
     if (triggerSearch) {
@@ -59,6 +66,7 @@ function MainContent() {
       ) : (
         <NotFoundChar />
       )}
+      <Pagination totalPages={totalPages} />
     </main>
   );
 }
