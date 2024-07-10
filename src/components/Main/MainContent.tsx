@@ -14,6 +14,7 @@ function MainContent() {
   const [error, setError] = useState<string | null>(null);
 
   const loadCharacters = useCallback(async () => {
+    console.log('loadCharacters called with query:', searchQuery);
     setLoading(true);
     setError(null);
 
@@ -28,12 +29,13 @@ function MainContent() {
     }
   }, [searchQuery]);
 
-  useEffect(() => {
-    loadCharacters();
-  }, [loadCharacters]);
+  // useEffect(() => {
+  //   loadCharacters();
+  // }, [loadCharacters]);
 
   useEffect(() => {
     if (triggerSearch) {
+      console.log('triggerSearch is true, loading characters');
       loadCharacters().then(resetTriggerSearch);
     }
   }, [triggerSearch, loadCharacters, resetTriggerSearch]);

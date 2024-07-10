@@ -8,15 +8,17 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [triggerSearch, setTriggerSearch] = useState<boolean>(false);
 
   const handleSearch = useCallback(() => {
-    setSearchQuery((prevQuery) => prevQuery.trim());
+    console.log('handleSearch called');
     setTriggerSearch(true);
   }, []);
 
   const resetTriggerSearch = useCallback(() => {
+    console.log('resetTriggerSearch called');
     setTriggerSearch(false);
   }, []);
 
   useEffect(() => {
+    console.log('searchQuery updated:', searchQuery);
     localStorage.setItem('searchQuery', searchQuery);
   }, [searchQuery]);
 
