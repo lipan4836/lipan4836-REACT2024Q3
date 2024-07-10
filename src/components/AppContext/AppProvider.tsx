@@ -1,10 +1,9 @@
 import { useState, useCallback, useEffect, ReactNode } from 'react';
 import AppContext from './AppContext';
+import useSearchQuery from '../../hooks/useSearchQuery';
 
 const AppProvider = ({ children }: { children: ReactNode }) => {
-  const [searchQuery, setSearchQuery] = useState<string>(
-    () => localStorage.getItem('searchQuery') || '',
-  );
+  const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [triggerSearch, setTriggerSearch] = useState<boolean>(false);
 
   const handleSearch = useCallback(() => {
