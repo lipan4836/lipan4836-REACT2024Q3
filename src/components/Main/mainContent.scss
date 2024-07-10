@@ -19,3 +19,21 @@
     padding: 8px;
   }
 }
+
+.pagination {
+  margin-bottom: 32px;
+  .pagBtn {
+    border: none;
+    padding: 5px;
+    cursor: pointer;
+    background-color: #ea7a45;
+  }
+
+  .active {
+    background-color: transparent;
+  }
+
+  .pagDots {
+    margin: auto 10px;
+  }
+}

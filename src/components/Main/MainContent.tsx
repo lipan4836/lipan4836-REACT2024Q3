@@ -7,7 +7,7 @@ import NotFoundChar from '../NotFoundChar/NotFoundChar';
 import { useCallback, useEffect, useState } from 'react';
 import useAppContext from '../AppContext/useAppContext';
 import { useSearchParams } from 'react-router-dom';
-import Pagination from '../Pagination/Pagination';
+import Pagination from './Pagination';
 
 function MainContent() {
   const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
