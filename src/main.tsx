@@ -7,6 +7,7 @@ import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary.tsx';
 import ErrorContent from './components/ErrorBoundary/ErrorContent.tsx';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage.tsx';
 import MainContent from './components/Main/MainContent.tsx';
+import CardDetail from './components/CardDetail/CardDetail.tsx';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,12 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <MainContent />,
+        children: [
+          {
+            path: 'details/:id',
+            element: <CardDetail />,
+          },
+        ],
       },
       {
         path: '*',

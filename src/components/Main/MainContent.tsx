@@ -1,72 +1,95 @@
 import './mainContent.scss';
 import { Character, CharacterResponse } from '../../types/characterResponse';
-import fetchData from '../../api/api';
+import { fetchData } from '../../api/api';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
 import { useCallback, useEffect, useState } from 'react';
 import useAppContext from '../AppContext/useAppContext';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import Pagination from './Pagination';
 
 function MainContent() {
-  const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
+  const { searchQuery, triggerSearch, resetTriggerSearch, currentPage, setCurrentPage } =
+    useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(1);
-  const [searchParams] = useSearchParams();
-  const page = parseInt(searchParams.get('page') || '1', 10);
   const limit = 6;
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const loadCharacters = useCallback(async () => {
-    console.log('loadCharacters called with query:', searchQuery);
     setLoading(true);
     setError(null);
 
     try {
-      const response: CharacterResponse = await fetchData(page, limit, searchQuery);
+      const response: CharacterResponse = await fetchData(currentPage, limit, searchQuery);
       setCharacters(response.characters);
-      setTotalPages(Math.floor(response.total / response.pageSize));
+      setTotalPages(Math.ceil(response.total / response.pageSize));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [page, searchQuery]);
+  }, [currentPage, searchQuery]);
+
+  useEffect(() => {
+    const page = searchParams.get('page');
+    if (!page) {
+      setSearchParams({ page: '1' });
+      setCurrentPage(1);
+    } else {
+      setCurrentPage(parseInt(page, 10));
+    }
+  }, [setSearchParams, setCurrentPage, searchParams]);
 
   useEffect(() => {
     loadCharacters();
-  }, [loadCharacters]);
+  }, [currentPage, loadCharacters]);
 
   useEffect(() => {
     if (triggerSearch) {
-      console.log('triggerSearch is true, loading characters');
       loadCharacters().then(resetTriggerSearch);
     }
   }, [triggerSearch, loadCharacters, resetTriggerSearch]);
 
-  if (loading) {
-    return <Loader />;
-  }
-
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  const handleCardClick = (id: number) => {
+    const currentParams = new URLSearchParams(location.search);
+    currentParams.set('details', id.toString());
+    navigate(`?${currentParams.toString()}`);
+  };
 
   return (
     <main className="main">
-      {characters.length > 0 ? (
-        <div className="mainWrap">
-          {characters.map((character) => (
-            <Card key={character.id} character={character} />
-          ))}
+      <div className="cardList">
+        {loading ? (
+          <Loader />
+        ) : error ? (
+          <div>Error: {error}</div>
+        ) : characters.length > 0 ? (
+          <div className="mainWrap">
+            {characters.map((character) => (
+              <Card
+                key={character.id}
+                character={character}
+                onClick={() => handleCardClick(character.id)}
+              />
+            ))}
+          </div>
+        ) : (
+          <NotFoundChar />
+        )}
+        <Pagination totalPages={totalPages} />
+      </div>
+      {searchParams.get('details') && (
+        <div className="characterDetails">
+          <Outlet />
         </div>
-      ) : (
-        <NotFoundChar />
       )}
-      <Pagination totalPages={totalPages} />
     </main>
   );
 }

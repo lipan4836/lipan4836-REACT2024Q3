@@ -11,8 +11,14 @@ function Pagination({ totalPages }: PaginationProps) {
   const navigate = useNavigate();
   const maxPageButtons = 10;
 
+  // const handlePageChange = (page: number) => {
+  //   navigate(`?page=${page}`);
+  // };
+
   const handlePageChange = (page: number) => {
-    navigate(`?page=${page}`);
+    const currentParams = new URLSearchParams(searchParams.toString());
+    currentParams.set('page', page.toString());
+    navigate(`?${currentParams.toString()}`);
   };
 
   const renderPageNumbers = () => {

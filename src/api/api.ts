@@ -1,4 +1,4 @@
-import { CharacterResponse } from '../types/characterResponse';
+import { Character, CharacterResponse } from '../types/characterResponse';
 
 const apiUrl = 'https://dattebayo-api.onrender.com/characters';
 
@@ -26,4 +26,22 @@ async function fetchData(page: number, limit: number, name?: string): Promise<Ch
   }
 }
 
-export default fetchData;
+async function fetchDataById(id: number): Promise<Character> {
+  const url = `${apiUrl}` + '/' + `${id}`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Something gone wrong!!\nStatus: ${response.status}`);
+    }
+
+    const data: Character = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Bad fetching data:', error);
+    throw error;
+  }
+}
+
+export { fetchData, fetchDataById };

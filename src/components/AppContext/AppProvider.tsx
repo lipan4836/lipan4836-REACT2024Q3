@@ -5,25 +5,35 @@ import useSearchQuery from '../../hooks/useSearchQuery';
 const AppProvider = ({ children }: { children: ReactNode }) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [triggerSearch, setTriggerSearch] = useState<boolean>(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handleSearch = useCallback(() => {
-    console.log('handleSearch called');
     setTriggerSearch(true);
   }, []);
 
   const resetTriggerSearch = useCallback(() => {
-    console.log('resetTriggerSearch called');
     setTriggerSearch(false);
   }, []);
 
   useEffect(() => {
-    console.log('searchQuery updated:', searchQuery);
     localStorage.setItem('searchQuery', searchQuery);
   }, [searchQuery]);
 
+  useEffect(() => {
+    localStorage.setItem('currentPage', currentPage.toString());
+  }, [currentPage]);
+
   return (
     <AppContext.Provider
-      value={{ searchQuery, setSearchQuery, triggerSearch, handleSearch, resetTriggerSearch }}
+      value={{
+        searchQuery,
+        setSearchQuery,
+        triggerSearch,
+        handleSearch,
+        resetTriggerSearch,
+        currentPage,
+        setCurrentPage,
+      }}
     >
       {children}
     </AppContext.Provider>
