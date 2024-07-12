@@ -6,50 +6,42 @@ import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
 import { useCallback, useEffect, useState } from 'react';
 import useAppContext from '../AppContext/useAppContext';
-import { Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Pagination from './Pagination';
 
 function MainContent() {
-  const { searchQuery, triggerSearch, resetTriggerSearch, currentPage, setCurrentPage } =
-    useAppContext();
+  const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalPages, setTotalPages] = useState<number>(1);
   const limit = 6;
   const navigate = useNavigate();
-  const location = useLocation();
-  const [searchParams, setSearchParams] = useSearchParams();
+  const { pageId } = useParams();
 
   const loadCharacters = useCallback(async () => {
     setLoading(true);
     setError(null);
 
     try {
-      const response: CharacterResponse = await fetchData(currentPage, limit, searchQuery);
+      const response: CharacterResponse = await fetchData(pageId ? +pageId : 1, limit, searchQuery);
       setCharacters(response.characters);
-      setTotalPages(Math.ceil(response.total / response.pageSize));
+      setTotalPages(Math.floor(response.total / response.pageSize));
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
       setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  }, [currentPage, searchQuery]);
+  }, [pageId, searchQuery]);
 
   useEffect(() => {
-    const page = searchParams.get('page');
-    if (!page) {
-      setSearchParams({ page: '1' });
-      setCurrentPage(1);
+    if (!pageId) {
+      navigate('/page/1');
     } else {
-      setCurrentPage(parseInt(page, 10));
+      loadCharacters();
     }
-  }, [setSearchParams, setCurrentPage, searchParams]);
-
-  useEffect(() => {
-    loadCharacters();
-  }, [currentPage, loadCharacters]);
+  }, [pageId, loadCharacters, navigate]);
 
   useEffect(() => {
     if (triggerSearch) {
@@ -58,19 +50,21 @@ function MainContent() {
   }, [triggerSearch, loadCharacters, resetTriggerSearch]);
 
   const handleCardClick = (id: number) => {
-    const currentParams = new URLSearchParams(location.search);
-    currentParams.set('details', id.toString());
-    navigate(`?${currentParams.toString()}`);
+    navigate(`details/${id}`);
   };
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
     <main className="main">
       <div className="cardList">
-        {loading ? (
-          <Loader />
-        ) : error ? (
-          <div>Error: {error}</div>
-        ) : characters.length > 0 ? (
+        {characters.length > 0 ? (
           <div className="mainWrap">
             {characters.map((character) => (
               <Card
@@ -85,11 +79,7 @@ function MainContent() {
         )}
         <Pagination totalPages={totalPages} />
       </div>
-      {searchParams.get('details') && (
-        <div className="characterDetails">
-          <Outlet />
-        </div>
-      )}
+      <Outlet />
     </main>
   );
 }

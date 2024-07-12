@@ -13,10 +13,13 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <ErrorContent error={null} errorInfo={null} />,
     children: [
       {
         path: '/',
+        element: <MainContent />,
+      },
+      {
+        path: 'page/:pageId',
         element: <MainContent />,
         children: [
           {

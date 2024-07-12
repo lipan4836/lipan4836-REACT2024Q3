@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './mainContent.scss';
 
 interface PaginationProps {
@@ -6,19 +6,13 @@ interface PaginationProps {
 }
 
 function Pagination({ totalPages }: PaginationProps) {
-  const [searchParams] = useSearchParams();
-  const currentPage = parseInt(searchParams.get('page') || '1', 10);
+  const { pageId } = useParams<{ pageId: string }>();
+  const currentPage = pageId ? parseInt(pageId, 10) : 1;
   const navigate = useNavigate();
   const maxPageButtons = 10;
 
-  // const handlePageChange = (page: number) => {
-  //   navigate(`?page=${page}`);
-  // };
-
   const handlePageChange = (page: number) => {
-    const currentParams = new URLSearchParams(searchParams.toString());
-    currentParams.set('page', page.toString());
-    navigate(`?${currentParams.toString()}`);
+    navigate(`/page/${page}`);
   };
 
   const renderPageNumbers = () => {

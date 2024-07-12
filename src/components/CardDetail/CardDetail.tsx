@@ -7,7 +7,7 @@ import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 
 function CardDetail() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>(); // Получаем параметр id из адресной строки
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,8 +18,10 @@ function CardDetail() {
       setError(null);
 
       try {
-        const response = await fetchDataById(id ? +id : 999);
-        setCharacter(response);
+        if (id) {
+          const response = await fetchDataById(+id);
+          setCharacter(response);
+        }
         setLoading(false);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
@@ -28,7 +30,9 @@ function CardDetail() {
       }
     };
 
-    loadCharacter();
+    if (id) {
+      loadCharacter();
+    }
   }, [id]);
 
   if (loading) return <Loader />;
@@ -38,7 +42,7 @@ function CardDetail() {
   if (!character) return <div>No character found</div>;
 
   return (
-    <>
+    <div className="characterDetails">
       <h2 className="char_name">{character.name}</h2>
       {character.images.length ? (
         <img src={character.images[0]} alt={character.name} className="char_img" />
@@ -56,7 +60,7 @@ function CardDetail() {
         <p className="char_personal_box_data">
           <strong>Sex:</strong> {character.personal.sex}
         </p>
-        {character.personal.birthdate && (
+        {character.personal.clan && (
           <div className="char_personal_box">
             <p className="char_personal_box_data">
               <strong>Clan:</strong> {character.personal.clan}
@@ -64,7 +68,7 @@ function CardDetail() {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 }
 
