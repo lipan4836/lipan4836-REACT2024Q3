@@ -53,6 +53,12 @@ function MainContent() {
     navigate(`details/${id}`);
   };
 
+  const handleClosePage = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+    if (event.target === event.currentTarget) {
+      navigate(`/page/${pageId}`);
+    }
+  };
+
   if (loading) {
     return <Loader />;
   }
@@ -65,7 +71,7 @@ function MainContent() {
     <main className="main">
       <div className="cardList">
         {characters.length > 0 ? (
-          <div className="mainWrap">
+          <div className="mainWrap" onClick={handleClosePage}>
             {characters.map((character) => (
               <Card
                 key={character.id}

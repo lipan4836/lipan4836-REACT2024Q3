@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Character } from '../../types/characterResponse';
 import './CardDetail.scss';
 import { fetchDataById } from '../../api/api';
@@ -7,10 +7,11 @@ import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 
 function CardDetail() {
-  const { id } = useParams<{ id: string }>(); // Получаем параметр id из адресной строки
+  const { id, pageId } = useParams<{ id: string; pageId: string }>(); // Получаем параметр id из адресной строки
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const loadCharacter = async () => {
@@ -35,6 +36,10 @@ function CardDetail() {
     }
   }, [id]);
 
+  const handleClosePage = () => {
+    navigate(`/page/${pageId}`); // Возвращаемся на текущую страницу
+  };
+
   if (loading) return <Loader />;
 
   if (error) return <div>Error: {error}</div>;
@@ -43,6 +48,9 @@ function CardDetail() {
 
   return (
     <div className="characterDetails">
+      <button className="closePage" onClick={handleClosePage}>
+        close
+      </button>
       <h2 className="char_name">{character.name}</h2>
       {character.images.length ? (
         <img src={character.images[0]} alt={character.name} className="char_img" />
