@@ -1,0 +1,47 @@
+.detailsWrap {
+  display: flex;
+  width: 60%;
+  // background-color: #e99d0e;
+  height: 100svh;
+}
+
+.characterDetails {
+  width: 100%;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 32px 0 auto;
+
+  & > * {
+    flex: 1;
+  }
+
+  .closePage {
+    width: 64px;
+    height: 64px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 100vw;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background: #f3db62;
+    }
+  }
+
+  .charDetail_personal {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+
+    .charDetail_debut {
+      font-weight: 700;
+    }
+  }
+}
