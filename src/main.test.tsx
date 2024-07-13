@@ -7,7 +7,7 @@ import ErrorContent from './components/ErrorBoundary/ErrorContent';
 import NotFoundPage from './components/NotFoundPage/NotFoundPage';
 import MainContent from './components/Main/MainContent';
 import CardDetail from './components/CardDetail/CardDetail';
-// import { act, ReactNode } from 'react';
+import { ReactNode } from 'react';
 
 jest.mock('./components/Header/Header', () => {
   return {

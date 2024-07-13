@@ -8,7 +8,7 @@ import NoPhoto from '../NoPhoto/NoPhoto';
 import closeBtn from '../../assets/svg/close.svg';
 
 function CardDetail() {
-  const { id, pageId } = useParams<{ id: string; pageId: string }>(); // Получаем параметр id из адресной строки
+  const { id, pageId } = useParams<{ id: string; pageId: string }>();
   const [character, setCharacter] = useState<Character | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +38,7 @@ function CardDetail() {
   }, [id]);
 
   const handleClosePage = () => {
-    navigate(`/page/${pageId}`); // Возвращаемся на текущую страницу
+    navigate(`/page/${pageId}`);
   };
 
   if (loading) return <Loader />;
