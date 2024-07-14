@@ -5,9 +5,7 @@ function Header() {
   return (
     <header className="header">
       <div className="headerCont">
-        <button className="reloadBtn" onClick={() => window.location.reload()}>
-          <h1 className="h1">naruto characters base</h1>
-        </button>
+        <h1 className="h1">naruto characters base</h1>
         <SearchBlock />
       </div>
     </header>

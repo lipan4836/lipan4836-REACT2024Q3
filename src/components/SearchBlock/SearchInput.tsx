@@ -6,13 +6,11 @@ function SearchInput() {
   const { setSearchQuery, searchQuery, handleSearch } = useAppContext();
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log('handleChange called with value:', event.target.value);
     setSearchQuery(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      console.log('Enter key pressed');
       handleSearch();
     }
   };

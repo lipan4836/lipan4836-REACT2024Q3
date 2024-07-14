@@ -12,7 +12,7 @@ function ErrorContent({ error, errorInfo }: ErrorContentProps) {
     <div className="errorContWrap">
       <div className="errorCont">
         <img src={errorImg} alt="Error" className="errorCont_img" />
-        <p className="errorCont_text">Ooops!.. Something gone wrong :( Please, reload page</p>
+        <p className="errorCont_text">Ooops!.. Something gone wrong. Please, reload page</p>
         {error && <p className="errorCont_message">{error.toString()}</p>}
         {errorInfo && <pre className="errorCont_stack">{errorInfo.componentStack}</pre>}
       </div>
