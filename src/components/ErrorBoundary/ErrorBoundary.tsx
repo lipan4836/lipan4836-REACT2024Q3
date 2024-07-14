@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode, ReactElement } from 'react';
+import { Component, ErrorInfo, ReactNode, ReactElement } from 'react';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -32,8 +32,7 @@ class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundaryState> {
 
   render(): ReactNode {
     if (this.state.hasError) {
-      const { error, errorInfo } = this.state;
-      return React.cloneElement(this.props.fallback, { error, errorInfo });
+      return this.props.fallback;
     }
 
     return this.props.children;
