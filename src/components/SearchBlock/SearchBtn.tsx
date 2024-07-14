@@ -5,7 +5,6 @@ function SearchBtn() {
   const { handleSearch } = useAppContext();
 
   const handleClick = () => {
-    console.log('Search button clicked');
     handleSearch();
   };
 

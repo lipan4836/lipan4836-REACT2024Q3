@@ -11,6 +11,12 @@ p {
   padding: 16px;
   border-radius: 15px;
   background: #ffe388;
+  cursor: pointer;
+  transition: all 0.2s ease-in;
+
+  &:hover {
+    background: #ffd64e;
+  }
 
   &_name {
     margin: 0;
