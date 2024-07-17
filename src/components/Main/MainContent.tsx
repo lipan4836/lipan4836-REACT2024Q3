@@ -10,7 +10,7 @@ import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Pagination from './Pagination';
 
 function MainContent() {
-  const { searchQuery, triggerSearch, resetTriggerSearch } = useAppContext();
+  const { searchQuery, triggerSearch, resetTriggerSearch, darkTheme } = useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -68,7 +68,7 @@ function MainContent() {
   }
 
   return (
-    <main className="main">
+    <main className={darkTheme ? 'main mainDark' : 'main'}>
       <div className="cardList">
         {characters.length > 0 ? (
           <div className="mainWrap" onClick={handleClosePage}>

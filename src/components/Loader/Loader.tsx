@@ -1,8 +1,11 @@
+import useAppContext from '../AppContext/useAppContext';
 import './Loader.scss';
 
 function Loader() {
+  const { darkTheme } = useAppContext();
+
   return (
-    <div className="loaderWrap" data-testid="loader">
+    <div className={darkTheme ? 'loaderWrap loaderWrapDark' : 'loaderWrap'} data-testid="loader">
       <span className="loader"></span>
     </div>
   );

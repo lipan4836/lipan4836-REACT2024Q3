@@ -1,8 +1,17 @@
 @import './styles/normalize';
 
+:root {
+  --text-color: #322f30;
+}
+
+[data-theme='dark'] {
+  --text-color: #e1d960;
+}
+
 body {
   font-family: 'Titillium Web';
   font-weight: 400;
+  color: var(--text-color);
 }
 
 #root {
@@ -21,6 +30,10 @@ body {
   justify-content: center;
   align-items: flex-start;
   background-color: #f3e7abcb;
+}
+
+.mainDark {
+  background-color: #426e6d;
 }
 
 ::-webkit-scrollbar {

@@ -15,7 +15,7 @@ p {
   transition: all 0.2s ease-in;
 
   &:hover {
-    background: #ffd64e;
+    background: #ffd64ebe;
   }
 
   &_name {
@@ -28,4 +28,8 @@ p {
     border-radius: 10px;
     object-fit: cover;
   }
+}
+
+.charDark {
+  background: #4e585f;
 }
