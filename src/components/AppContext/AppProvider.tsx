@@ -6,6 +6,9 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   const [searchQuery, setSearchQuery] = useSearchQuery('searchQuery');
   const [triggerSearch, setTriggerSearch] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [darkTheme, setDarkTheme] = useState<boolean>(
+    () => localStorage.getItem('darkTheme') === 'true',
+  );
 
   const handleSearch = useCallback(() => {
     setTriggerSearch(true);
@@ -23,6 +26,15 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
     localStorage.setItem('currentPage', currentPage.toString());
   }, [currentPage]);
 
+  const toggleTheme = useCallback(() => {
+    setDarkTheme((prevTheme) => !prevTheme);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem('darkTheme', darkTheme.toString());
+    document.body.setAttribute('data-theme', darkTheme ? 'dark' : 'light');
+  }, [darkTheme]);
+
   return (
     <AppContext.Provider
       value={{
@@ -33,6 +45,8 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
         resetTriggerSearch,
         currentPage,
         setCurrentPage,
+        darkTheme,
+        toggleTheme,
       }}
     >
       {children}

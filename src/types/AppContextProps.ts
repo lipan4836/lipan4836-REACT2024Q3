@@ -6,6 +6,8 @@ interface AppContextProps {
   resetTriggerSearch: () => void;
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  darkTheme: boolean;
+  toggleTheme: () => void;
 }
 
 export type { AppContextProps };
