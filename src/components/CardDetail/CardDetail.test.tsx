@@ -3,6 +3,7 @@ import '@testing-library/jest-dom';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import CardDetail from './CardDetail';
 import { fetchDataById } from '../../api/api';
+import AppProvider from '../AppContext/AppProvider';
 
 jest.mock('../../api/api');
 
@@ -27,11 +28,13 @@ describe('CardDetail component', () => {
     mockedFetchDataById.mockResolvedValueOnce(mockCharacter);
 
     render(
-      <MemoryRouter initialEntries={['/details/1']}>
-        <Routes>
-          <Route path="/details/:id" element={<CardDetail />} />
-        </Routes>
-      </MemoryRouter>,
+      <AppProvider>
+        <MemoryRouter initialEntries={['/details/1']}>
+          <Routes>
+            <Route path="/details/:id" element={<CardDetail />} />
+          </Routes>
+        </MemoryRouter>
+      </AppProvider>,
     );
 
     expect(screen.getByTestId('loader')).toBeInTheDocument();
@@ -58,11 +61,13 @@ describe('CardDetail component', () => {
     mockedFetchDataById.mockResolvedValueOnce(mockCharacter);
 
     const { container } = render(
-      <MemoryRouter initialEntries={['/details/1']}>
-        <Routes>
-          <Route path="/details/:id" element={<CardDetail />} />
-        </Routes>
-      </MemoryRouter>,
+      <AppProvider>
+        <MemoryRouter initialEntries={['/details/1']}>
+          <Routes>
+            <Route path="/details/:id" element={<CardDetail />} />
+          </Routes>
+        </MemoryRouter>
+      </AppProvider>,
     );
 
     await waitFor(() => {

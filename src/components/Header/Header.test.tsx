@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
 import Header from './Header';
+import AppProvider from '../AppContext/AppProvider';
 
 jest.mock('../SearchBlock/SearchBlock', () => ({
   __esModule: true,
@@ -12,7 +13,11 @@ describe('Header component', () => {
   });
 
   test('renders the Header component correctly', () => {
-    render(<Header />);
+    render(
+      <AppProvider>
+        <Header />
+      </AppProvider>,
+    );
 
     expect(screen.getByText(/naruto characters base/i)).toBeInTheDocument();
     expect(screen.getByText('Mocked SearchBlock')).toBeInTheDocument();
