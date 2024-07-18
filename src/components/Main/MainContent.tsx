@@ -8,9 +8,11 @@ import { useCallback, useEffect, useState } from 'react';
 import useAppContext from '../AppContext/useAppContext';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Pagination from './Pagination';
+import { useAppSelector, useAppDispatch } from '../../hooks/hooksRedux';
+import { setTriggerSearch } from '../../store/slices/searchSlice';
 
 function MainContent() {
-  const { searchQuery, triggerSearch, resetTriggerSearch, darkTheme } = useAppContext();
+  const { darkTheme } = useAppContext();
   const [characters, setCharacters] = useState<Character[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -18,6 +20,10 @@ function MainContent() {
   const limit = 6;
   const navigate = useNavigate();
   const { pageId } = useParams();
+
+  const dispatch = useAppDispatch();
+  const searchQuery = useAppSelector((state) => state.search.searchQuery);
+  const triggerSearch = useAppSelector((state) => state.search.triggerSearch);
 
   const loadCharacters = useCallback(async () => {
     setLoading(true);
@@ -45,9 +51,9 @@ function MainContent() {
 
   useEffect(() => {
     if (triggerSearch) {
-      loadCharacters().then(resetTriggerSearch);
+      loadCharacters().then(() => dispatch(setTriggerSearch(false)));
     }
-  }, [triggerSearch, loadCharacters, resetTriggerSearch]);
+  }, [triggerSearch, loadCharacters, dispatch]);
 
   const handleCardClick = (id: number) => {
     navigate(`details/${id}`);

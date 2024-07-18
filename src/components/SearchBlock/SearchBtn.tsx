@@ -1,11 +1,12 @@
 import searchLogo from '../../assets/svg/btn-search.svg';
-import useAppContext from '../AppContext/useAppContext';
+import { useAppDispatch } from '../../hooks/hooksRedux';
+import { setTriggerSearch } from '../../store/slices/searchSlice';
 
 function SearchBtn() {
-  const { handleSearch } = useAppContext();
+  const dispatch = useAppDispatch();
 
   const handleClick = () => {
-    handleSearch();
+    dispatch(setTriggerSearch(true));
   };
 
   return (

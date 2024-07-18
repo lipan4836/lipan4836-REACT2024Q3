@@ -6,6 +6,8 @@ import { fetchDataById } from '../../api/api';
 import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import closeBtn from '../../assets/svg/close.svg';
+import { useAppDispatch } from '../../hooks/hooksRedux';
+import { setCurrentPage } from '../../store/slices/pageSlice';
 
 function CardDetail() {
   const { id, pageId } = useParams<{ id: string; pageId: string }>();
@@ -13,6 +15,7 @@ function CardDetail() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     const loadCharacter = async () => {
@@ -38,6 +41,9 @@ function CardDetail() {
   }, [id]);
 
   const handleClosePage = () => {
+    if (pageId) {
+      dispatch(setCurrentPage(Number(pageId)));
+    }
     navigate(`/page/${pageId}`);
   };
 

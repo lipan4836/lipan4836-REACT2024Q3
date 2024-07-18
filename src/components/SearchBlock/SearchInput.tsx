@@ -1,17 +1,19 @@
 import { ChangeEvent } from 'react';
 import './SearchBlock.scss';
-import useAppContext from '../AppContext/useAppContext';
+import { useAppDispatch, useAppSelector } from '../../hooks/hooksRedux';
+import { setSearchQuery, setTriggerSearch } from '../../store/slices/searchSlice';
 
 function SearchInput() {
-  const { setSearchQuery, searchQuery, handleSearch } = useAppContext();
+  const dispatch = useAppDispatch();
+  const searchQuery = useAppSelector((state) => state.search.searchQuery);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(event.target.value);
+    dispatch(setSearchQuery(event.target.value));
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      handleSearch();
+      dispatch(setTriggerSearch(true));
     }
   };
 
