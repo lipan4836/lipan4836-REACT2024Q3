@@ -6,7 +6,7 @@ interface SearchState {
 }
 
 const initialState: SearchState = {
-  searchQuery: '',
+  searchQuery: localStorage.getItem('searchQuery') || '',
   triggerSearch: false,
 };
 
@@ -16,6 +16,7 @@ const searchSlice = createSlice({
   reducers: {
     setSearchQuery(state, action: PayloadAction<string>) {
       state.searchQuery = action.payload;
+      localStorage.setItem('searchQuery', action.payload);
     },
 
     setTriggerSearch(state, action: PayloadAction<boolean>) {
