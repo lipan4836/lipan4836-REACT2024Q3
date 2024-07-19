@@ -1,55 +1,22 @@
-import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { Character } from '../../types/characterResponse';
 import './CardDetail.scss';
-import { fetchDataById } from '../../api/api';
 import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import closeBtn from '../../assets/svg/close.svg';
-import { useAppDispatch } from '../../hooks/hooksRedux';
-import { setCurrentPage } from '../../store/slices/pageSlice';
+import { useFetchCharacterByIdQuery } from '../../store/slices/apiSlice';
 
 function CardDetail() {
   const { id, pageId } = useParams<{ id: string; pageId: string }>();
-  const [character, setCharacter] = useState<Character | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    const loadCharacter = async () => {
-      setLoading(true);
-      setError(null);
-
-      try {
-        if (id) {
-          const response = await fetchDataById(+id);
-          setCharacter(response);
-        }
-        setLoading(false);
-      } catch (error) {
-        const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-        setError(errorMessage);
-        setLoading(false);
-      }
-    };
-
-    if (id) {
-      loadCharacter();
-    }
-  }, [id]);
+  const { data: character, error, isLoading } = useFetchCharacterByIdQuery(Number(id));
 
   const handleClosePage = () => {
-    if (pageId) {
-      dispatch(setCurrentPage(Number(pageId)));
-    }
     navigate(`/page/${pageId}`);
   };
 
-  if (loading) return <Loader />;
+  if (isLoading) return <Loader />;
 
-  if (error) return <div>Error: {error}</div>;
+  if (error) return <div>Error: {error.toString()}</div>;
 
   if (!character) return <div>No character found</div>;
 

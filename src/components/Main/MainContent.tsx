@@ -1,59 +1,46 @@
 import './mainContent.scss';
-import { Character, CharacterResponse } from '../../types/characterResponse';
-import { fetchData } from '../../api/api';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import useAppContext from '../AppContext/useAppContext';
 import { Outlet, useNavigate, useParams } from 'react-router-dom';
 import Pagination from './Pagination';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooksRedux';
 import { setTriggerSearch } from '../../store/slices/searchSlice';
+import { useFetchCharactersQuery } from '../../store/slices/apiSlice';
+import { Character } from '../../types/characterResponse';
 
 function MainContent() {
   const { darkTheme } = useAppContext();
-  const [characters, setCharacters] = useState<Character[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const [totalPages, setTotalPages] = useState<number>(1);
-  const limit = 6;
-  const navigate = useNavigate();
-  const { pageId } = useParams();
-
   const dispatch = useAppDispatch();
   const searchQuery = useAppSelector((state) => state.search.searchQuery);
   const triggerSearch = useAppSelector((state) => state.search.triggerSearch);
+  const navigate = useNavigate();
+  const { pageId } = useParams();
 
-  const loadCharacters = useCallback(async () => {
-    setLoading(true);
-    setError(null);
+  const page = pageId ? +pageId : 1;
+  const limit = 6;
 
-    try {
-      const response: CharacterResponse = await fetchData(pageId ? +pageId : 1, limit, searchQuery);
-      setCharacters(response.characters);
-      setTotalPages(Math.floor(response.total / response.pageSize));
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred';
-      setError(errorMessage);
-    } finally {
-      setLoading(false);
-    }
-  }, [pageId, searchQuery]);
+  const { data, error, isLoading } = useFetchCharactersQuery({
+    page,
+    limit,
+    searchQuery: searchQuery,
+  });
 
   useEffect(() => {
     if (!pageId) {
       navigate('/page/1');
     } else {
-      loadCharacters();
+      dispatch(setTriggerSearch(false));
     }
-  }, [pageId, loadCharacters, navigate]);
+  }, [pageId, dispatch, navigate]);
 
   useEffect(() => {
     if (triggerSearch) {
-      loadCharacters().then(() => dispatch(setTriggerSearch(false)));
+      dispatch(setTriggerSearch(false));
     }
-  }, [triggerSearch, loadCharacters, dispatch]);
+  }, [triggerSearch, dispatch]);
 
   const handleCardClick = (id: number) => {
     navigate(`details/${id}`);
@@ -65,13 +52,16 @@ function MainContent() {
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     return <Loader />;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>Error: {error.toString()}</div>;
   }
+
+  const characters: Character[] = data ? data.characters : [];
+  const totalPages = data ? Math.floor(data.total / data.pageSize) : 1;
 
   return (
     <main className={darkTheme ? 'main mainDark' : 'main'}>
