@@ -18,8 +18,13 @@ p {
     background: #ffd64ebe;
   }
 
-  &_name {
-    margin: 0;
+  &_headCont {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__name {
+      margin: 0;
+    }
   }
 
   &_img {

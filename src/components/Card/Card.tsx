@@ -2,6 +2,7 @@ import { Character } from '../../types/characterResponse';
 import './Card.scss';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import useAppContext from '../AppContext/useAppContext';
+import Checkbox from './Checkbox/Checkbox';
 
 interface CardProps {
   character: Character;
@@ -14,7 +15,11 @@ function Card({ character, onClick }: CardProps) {
 
   return (
     <article className={darkTheme ? 'char charDark' : 'char'} data-id={id} onClick={onClick}>
-      <h2 className="char_name">{name}</h2>
+      <div className="char_headCont">
+        <h2 className="char_headCont__name">{name}</h2>
+        <Checkbox />
+      </div>
+
       {images.length ? <img src={images[0]} alt={name} className="char_img" /> : <NoPhoto />}
     </article>
   );
