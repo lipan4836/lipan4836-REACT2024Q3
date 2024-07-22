@@ -18,16 +18,17 @@ function Flyout() {
   };
 
   const createCsvContent = (data: Character[]) => {
+    const headers = ['id', 'Name', 'Birthday', 'Sex', 'Clan', 'Image'];
     const rows = data.map((item) => [
-      `id: ${item.id}`,
-      `Name: ${item.name}`,
-      `Birthday: ${item.personal.birthdate ? item.personal.birthdate : 'unknown'}`,
-      `Sex: ${item.personal.sex ? item.personal.sex : 'unknown'}`,
-      `Clan: ${item.personal.clan ? item.personal.clan : 'unknown'}`,
-      `Image: ${item.images[0] ? item.images[0] : 'no image'}`,
+      `${item.id}`,
+      `${item.name}`,
+      `${item.personal.birthdate ? item.personal.birthdate : 'unknown'}`,
+      `${item.personal.sex ? item.personal.sex : 'unknown'}`,
+      `${item.personal.clan ? item.personal.clan : 'unknown'}`,
+      `${item.images[0] ? item.images[0] : 'no image'}`,
     ]);
 
-    return [...rows.map((row) => row.join(','))].join('\n') + '\n';
+    return [headers.join(','), ...rows.map((row) => row.join(','))].join('\n') + '\n';
   };
 
   const handleDownload = () => {
