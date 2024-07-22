@@ -9,13 +9,17 @@ import Pagination from './Pagination';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooksRedux';
 import { setTriggerSearch } from '../../store/slices/searchSlice';
 import { useFetchCharactersQuery } from '../../store/slices/apiSlice';
+import { setCurrentPage } from '../../store/slices/pageSlice';
+import { setSelectedItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';
+import { RootState } from '../../store/strore';
 
 function MainContent() {
   const { darkTheme } = useAppContext();
   const dispatch = useAppDispatch();
-  const searchQuery = useAppSelector((state) => state.search.searchQuery);
-  const triggerSearch = useAppSelector((state) => state.search.triggerSearch);
+  const searchQuery = useAppSelector((state: RootState) => state.search.searchQuery);
+  const triggerSearch = useAppSelector((state: RootState) => state.search.triggerSearch);
+  const selectedItems = useAppSelector((state: RootState) => state.selectedItems.selectedItems);
   const navigate = useNavigate();
   const { pageId } = useParams();
 
@@ -29,18 +33,28 @@ function MainContent() {
   });
 
   useEffect(() => {
-    if (!pageId) {
-      navigate('/page/1');
-    } else {
-      dispatch(setTriggerSearch(false));
+    const savedPage = localStorage.getItem('currentPage');
+    const savedSelectedItems = localStorage.getItem('selectedItems');
+    if (savedPage) {
+      dispatch(setCurrentPage(Number(savedPage)));
     }
-  }, [pageId, dispatch, navigate]);
+
+    if (savedSelectedItems) {
+      dispatch(setSelectedItems(JSON.parse(savedSelectedItems)));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
-    if (triggerSearch) {
-      dispatch(setTriggerSearch(false));
-    }
+    localStorage.setItem('currentPage', page.toString());
+  }, [page]);
+
+  useEffect(() => {
+    if (triggerSearch) dispatch(setTriggerSearch(false));
   }, [triggerSearch, dispatch]);
+
+  useEffect(() => {
+    localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
+  }, [selectedItems]);
 
   const handleCardClick = (id: number) => {
     navigate(`details/${id}`);

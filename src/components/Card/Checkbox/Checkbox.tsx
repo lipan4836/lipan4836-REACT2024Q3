@@ -1,14 +1,37 @@
 import React from 'react';
 import './Checkbox.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
+import { RootState } from '../../../store/strore';
 
-const Checkbox: React.FC = () => {
+interface CheckboxProps {
+  id: number;
+}
+
+const Checkbox: React.FC<CheckboxProps> = ({ id }) => {
+  const dispatch = useDispatch();
+  const isSelected = useSelector((state: RootState) =>
+    state.selectedItems.selectedItems.includes(id),
+  );
+
   const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
     event.stopPropagation();
+    if (isSelected) {
+      dispatch(removeItem(id));
+    } else {
+      dispatch(addItem(id));
+    }
   };
 
   return (
     <div className="checkbox">
-      <input type="checkbox" className="check" id="check1" onClick={handleCheckboxClick} />
+      <input
+        type="checkbox"
+        className="check"
+        id={`check${id}`}
+        defaultChecked={isSelected}
+        onClick={handleCheckboxClick}
+      />
       <label htmlFor="check1" className="label">
         <svg viewBox="0 0 100 100" height="50" width="50">
           <rect x="30" y="20" width="50" height="50" stroke="black" fill="none" />

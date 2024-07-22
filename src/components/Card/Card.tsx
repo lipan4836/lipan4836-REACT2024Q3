@@ -17,7 +17,7 @@ function Card({ character, onClick }: CardProps) {
     <article className={darkTheme ? 'char charDark' : 'char'} data-id={id} onClick={onClick}>
       <div className="char_headCont">
         <h2 className="char_headCont__name">{name}</h2>
-        <Checkbox />
+        <Checkbox id={id} />
       </div>
 
       {images.length ? <img src={images[0]} alt={name} className="char_img" /> : <NoPhoto />}
