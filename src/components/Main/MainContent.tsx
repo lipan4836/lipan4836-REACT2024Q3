@@ -13,6 +13,7 @@ import { setCurrentPage } from '../../store/slices/pageSlice';
 import { setSelectedItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';
 import { RootState } from '../../store/strore';
+import Flyout from '../Flyout/Flyout';
 
 function MainContent() {
   const { darkTheme } = useAppContext();
@@ -93,6 +94,7 @@ function MainContent() {
         ) : (
           <NotFoundChar />
         )}
+        {selectedItems.length > 0 && <Flyout />}
         <Pagination totalPages={totalPages} />
       </div>
       <Outlet />
