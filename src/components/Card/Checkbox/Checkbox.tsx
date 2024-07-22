@@ -14,13 +14,18 @@ const Checkbox: React.FC<CheckboxProps> = ({ id }) => {
     state.selectedItems.selectedItems.includes(id),
   );
 
-  const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.stopPropagation();
+    console.log(event);
     if (isSelected) {
       dispatch(removeItem(id));
     } else {
       dispatch(addItem(id));
     }
+  };
+
+  const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.stopPropagation();
   };
 
   return (
@@ -29,10 +34,11 @@ const Checkbox: React.FC<CheckboxProps> = ({ id }) => {
         type="checkbox"
         className="check"
         id={`check${id}`}
-        defaultChecked={isSelected}
+        checked={isSelected}
+        onChange={handleCheckboxChange}
         onClick={handleCheckboxClick}
       />
-      <label htmlFor="check1" className="label">
+      <label htmlFor={`check${id}`} className="label">
         <svg viewBox="0 0 100 100" height="50" width="50">
           <rect x="30" y="20" width="50" height="50" stroke="black" fill="none" />
           <g transform="translate(0,-952.36216)" id="layer1">

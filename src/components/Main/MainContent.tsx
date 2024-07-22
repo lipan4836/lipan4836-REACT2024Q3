@@ -94,8 +94,8 @@ function MainContent() {
         ) : (
           <NotFoundChar />
         )}
-        {selectedItems.length > 0 && <Flyout />}
         <Pagination totalPages={totalPages} />
+        {selectedItems.length > 0 && <Flyout />}
       </div>
       <Outlet />
     </main>
