@@ -3,24 +3,23 @@ import './Checkbox.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
 import { RootState } from '../../../store/strore';
+import { Character } from '../../../types/characterResponse';
 
 interface CheckboxProps {
-  id: number;
+  character: Character; // Принимаем весь объект персонажа
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({ id }) => {
+const Checkbox: React.FC<CheckboxProps> = ({ character }) => {
   const dispatch = useDispatch();
   const isSelected = useSelector((state: RootState) =>
-    state.selectedItems.selectedItems.includes(id),
+    state.selectedItems.selectedItems.some((item) => item.id === character.id),
   );
 
-  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.stopPropagation();
-    console.log(event);
+  const handleCheckboxChange = () => {
     if (isSelected) {
-      dispatch(removeItem(id));
+      dispatch(removeItem(character.id));
     } else {
-      dispatch(addItem(id));
+      dispatch(addItem(character));
     }
   };
 
@@ -33,12 +32,12 @@ const Checkbox: React.FC<CheckboxProps> = ({ id }) => {
       <input
         type="checkbox"
         className="check"
-        id={`check${id}`}
+        id={`check${character.id}`}
         checked={isSelected}
         onChange={handleCheckboxChange}
         onClick={handleCheckboxClick}
       />
-      <label htmlFor={`check${id}`} className="label">
+      <label htmlFor={`check${character.id}`} className="label">
         <svg viewBox="0 0 100 100" height="50" width="50">
           <rect x="30" y="20" width="50" height="50" stroke="black" fill="none" />
           <g transform="translate(0,-952.36216)" id="layer1">

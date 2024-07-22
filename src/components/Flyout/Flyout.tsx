@@ -4,14 +4,36 @@ import useAppContext from '../AppContext/useAppContext';
 import './Flyout.scss';
 import { useDispatch } from 'react-redux';
 import { removeAllItems } from '../../store/slices/selectedItemsSlice';
+import { Character } from '../../types/characterResponse';
+import { useState } from 'react';
 
 function Flyout() {
   const { darkTheme } = useAppContext();
   const selectedItems = useAppSelector((state: RootState) => state.selectedItems.selectedItems);
   const dispatch = useDispatch();
+  const [url, setUrl] = useState('');
 
   const handleUnselectAll = () => {
     dispatch(removeAllItems());
+  };
+
+  const createCsvContent = (data: Character[]) => {
+    const rows = data.map((item) => [
+      `id: ${item.id}`,
+      `Name: ${item.name}`,
+      `Birthday: ${item.personal.birthdate ? item.personal.birthdate : 'unknown'}`,
+      `Sex: ${item.personal.sex ? item.personal.sex : 'unknown'}`,
+      `Clan: ${item.personal.clan ? item.personal.clan : 'unknown'}`,
+      `Image: ${item.images[0] ? item.images[0] : 'no image'}`,
+    ]);
+
+    return [...rows.map((row) => row.join(','))].join('\n') + '\n';
+  };
+
+  const handleDownload = () => {
+    const csvData = createCsvContent(selectedItems);
+    const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' });
+    setUrl(URL.createObjectURL(blob));
   };
 
   return (
@@ -26,7 +48,14 @@ function Flyout() {
         >
           Unselect all
         </button>
-        <button className={darkTheme ? 'flyout_btn dark_btn' : 'flyout_btn'}>Download</button>
+        <a href={url} download={`${selectedItems.length}_characters.csv`}>
+          <button
+            className={darkTheme ? 'flyout_btn dark_btn' : 'flyout_btn'}
+            onClick={handleDownload}
+          >
+            Download
+          </button>
+        </a>
       </div>
     </>
   );
