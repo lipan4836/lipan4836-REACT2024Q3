@@ -14,7 +14,7 @@ interface Character {
   jutsu: string[];
   natureType?: string[];
   personal: Personal;
-  rank: Rank;
+  rank?: Rank;
   tools?: string[];
   voiceActors?: VoiceActors;
 }
