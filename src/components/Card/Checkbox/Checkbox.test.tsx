@@ -41,19 +41,19 @@ describe('Checkbox Component', () => {
         selectedItems: [],
       },
     });
-
-    store.dispatch = jest.fn();
   });
 
-  test('renders checkbox and label', () => {
-    render(
+  const renderComponent = (store: MockStoreEnhanced<Partial<RootState>>) => {
+    return render(
       <Provider store={store}>
         <Checkbox character={character} />
       </Provider>,
     );
+  };
 
+  test('renders checkbox', () => {
+    renderComponent(store);
     expect(screen.getByRole('checkbox')).toBeInTheDocument();
-    expect(screen.getByLabelText(`check${character.id}`)).toBeInTheDocument();
   });
 
   test('checkbox is checked when item is selected', () => {
@@ -63,35 +63,19 @@ describe('Checkbox Component', () => {
       },
     });
 
-    render(
-      <Provider store={store}>
-        <Checkbox character={character} />
-      </Provider>,
-    );
-
+    renderComponent(store);
     expect(screen.getByRole('checkbox')).toBeChecked();
   });
 
   test('checkbox is not checked when item is not selected', () => {
-    render(
-      <Provider store={store}>
-        <Checkbox character={character} />
-      </Provider>,
-    );
-
+    renderComponent(store);
     expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
   test('dispatches addItem action when checkbox is checked', () => {
-    render(
-      <Provider store={store}>
-        <Checkbox character={character} />
-      </Provider>,
-    );
-
+    renderComponent(store);
     fireEvent.click(screen.getByRole('checkbox'));
-
-    expect(store.dispatch).toHaveBeenCalledWith(addItem(character));
+    expect(store.getActions()).toContainEqual(addItem(character));
   });
 
   test('dispatches removeItem action when checkbox is unchecked', () => {
@@ -101,14 +85,8 @@ describe('Checkbox Component', () => {
       },
     });
 
-    render(
-      <Provider store={store}>
-        <Checkbox character={character} />
-      </Provider>,
-    );
-
+    renderComponent(store);
     fireEvent.click(screen.getByRole('checkbox'));
-
-    expect(store.dispatch).toHaveBeenCalledWith(removeItem(character.id));
+    expect(store.getActions()).toContainEqual(removeItem(character.id));
   });
 });

@@ -2,16 +2,35 @@ import { render, screen, waitFor, act } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import MainContent from './MainContent';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import { fetchData } from '../../api/api';
+import { useFetchCharactersQuery } from '../../store/slices/apiSlice';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
 import AppProvider from '../AppContext/AppProvider';
 
-jest.mock('../../api/api');
+const mockStore = configureStore();
 
-const mockedFetchData = fetchData as jest.MockedFunction<typeof fetchData>;
+jest.mock('../../store/slices/apiSlice', () => ({
+  useFetchCharactersQuery: jest.fn(),
+}));
 
 describe('MainContent component', () => {
+  let store: ReturnType<typeof mockStore>;
+
   beforeEach(() => {
-    mockedFetchData.mockClear();
+    store = mockStore({
+      search: {
+        searchQuery: '',
+        triggerSearch: false,
+      },
+      selectedItems: {
+        selectedItems: [],
+      },
+      page: {
+        currentPage: 1,
+      },
+    });
+
+    (useFetchCharactersQuery as jest.Mock).mockReset();
   });
 
   test('renders the specified number of cards', async () => {
@@ -71,22 +90,28 @@ describe('MainContent component', () => {
       total: 6,
     };
 
-    mockedFetchData.mockResolvedValueOnce(mockResponse);
+    (useFetchCharactersQuery as jest.Mock).mockReturnValue({
+      data: mockResponse,
+      error: null,
+      isLoading: false,
+    });
 
     await act(async () => {
       render(
-        <AppProvider>
-          <MemoryRouter initialEntries={['/page/1']}>
-            <Routes>
-              <Route path="page/:pageId" element={<MainContent />} />
-            </Routes>
-          </MemoryRouter>
-        </AppProvider>,
+        <Provider store={store}>
+          <AppProvider>
+            <MemoryRouter initialEntries={['/page/1']}>
+              <Routes>
+                <Route path="page/:pageId" element={<MainContent />} />
+              </Routes>
+            </MemoryRouter>
+          </AppProvider>
+        </Provider>,
       );
     });
 
     await waitFor(() => {
-      expect(mockedFetchData).toHaveBeenCalledTimes(1);
+      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(1);
       expect(screen.getAllByRole('article')).toHaveLength(mockResponse.characters.length);
     });
   });
@@ -99,25 +124,81 @@ describe('MainContent component', () => {
       total: 0,
     };
 
-    mockedFetchData.mockResolvedValueOnce(mockResponse);
+    (useFetchCharactersQuery as jest.Mock).mockReturnValue({
+      data: mockResponse,
+      error: null,
+      isLoading: false,
+    });
 
     await act(async () => {
       render(
-        <AppProvider>
-          <MemoryRouter initialEntries={['/page/1']}>
-            <Routes>
-              <Route path="page/:pageId" element={<MainContent />} />
-            </Routes>
-          </MemoryRouter>
-        </AppProvider>,
+        <Provider store={store}>
+          <AppProvider>
+            <MemoryRouter initialEntries={['/page/1']}>
+              <Routes>
+                <Route path="page/:pageId" element={<MainContent />} />
+              </Routes>
+            </MemoryRouter>
+          </AppProvider>
+        </Provider>,
       );
     });
 
     await waitFor(() => {
-      expect(mockedFetchData).toHaveBeenCalledTimes(1);
+      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(1);
       expect(
         screen.getByText(/Sorry, but there is no such character in the Naruto universe./i),
       ).toBeInTheDocument();
     });
+  });
+
+  test('displays loader when data is loading', async () => {
+    (useFetchCharactersQuery as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: null,
+      isLoading: true,
+    });
+
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <AppProvider>
+            <MemoryRouter initialEntries={['/page/1']}>
+              <Routes>
+                <Route path="page/:pageId" element={<MainContent />} />
+              </Routes>
+            </MemoryRouter>
+          </AppProvider>
+        </Provider>,
+      );
+    });
+
+    expect(screen.getByTestId('loader')).toBeInTheDocument();
+  });
+
+  test('displays error message when there is an error', async () => {
+    const mockError = new Error('Failed to fetch data');
+
+    (useFetchCharactersQuery as jest.Mock).mockReturnValue({
+      data: undefined,
+      error: mockError,
+      isLoading: false,
+    });
+
+    await act(async () => {
+      render(
+        <Provider store={store}>
+          <AppProvider>
+            <MemoryRouter initialEntries={['/page/1']}>
+              <Routes>
+                <Route path="page/:pageId" element={<MainContent />} />
+              </Routes>
+            </MemoryRouter>
+          </AppProvider>
+        </Provider>,
+      );
+    });
+
+    expect(screen.getByText(/Error: Failed to fetch data/i)).toBeInTheDocument();
   });
 });

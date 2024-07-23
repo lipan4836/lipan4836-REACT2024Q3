@@ -46,8 +46,8 @@ describe('Flyout component', () => {
       selectedItems: {
         selectedItems: [mockCharacter],
       },
-      search: initialSearchState,  // Use initial state for search
-      page: initialPageState,      // Use initial state for page
+      search: initialSearchState,
+      page: initialPageState,
       [apiService.reducerPath]: apiService.reducer(undefined, { type: '' }),
     });
 
@@ -71,8 +71,8 @@ describe('Flyout component', () => {
       selectedItems: {
         selectedItems: [mockCharacter, mockAnotherCharacter],
       },
-      search: initialSearchState,  // Use initial state for search
-      page: initialPageState,      // Use initial state for page
+      search: initialSearchState,
+      page: initialPageState,
       [apiService.reducerPath]: apiService.reducer(undefined, { type: '' }),
     });
 
@@ -101,7 +101,7 @@ describe('Flyout component', () => {
     expect(store.dispatch).toHaveBeenCalledWith(removeAllItems());
   });
 
-  test('generates CSV file and sets URL on "Download" button click', () => {
+  test('"Download" button click works', () => {
     render(
       <Provider store={store}>
         <AppProvider>
@@ -113,12 +113,7 @@ describe('Flyout component', () => {
     const downloadButton = screen.getByText('Download');
     fireEvent.click(downloadButton);
 
-    const csvContent =
-      'id,Name,Birthday,Sex,Clan,Image\n1,Naruto Uzumaki,October 10,male,Uzumaki,https://example.com/naruto.jpg\n';
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const expectedUrl = URL.createObjectURL(blob);
-
-    expect(downloadButton.closest('a')).toHaveAttribute('href', expectedUrl);
+    expect(downloadButton.closest('a')).toHaveAttribute('href', 'mocked-url');
     expect(downloadButton.closest('a')).toHaveAttribute('download', '1_characters.csv');
   });
 });

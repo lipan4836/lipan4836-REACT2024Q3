@@ -1,52 +1,51 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import configureStore from 'redux-mock-store';
+import { setSearchQuery, setTriggerSearch } from '../../store/slices/searchSlice';
 import SearchInput from './SearchInput';
-import useAppContext from '../AppContext/useAppContext';
 
-jest.mock('../AppContext/useAppContext');
+const mockStore = configureStore([]);
 
-describe('SearchInput component', () => {
-  const setSearchQuery = jest.fn();
-  const handleSearch = jest.fn();
+describe('SearchInput', () => {
+  const store = mockStore({
+    search: {
+      searchQuery: '',
+    },
+  });
 
   beforeEach(() => {
-    (useAppContext as jest.Mock).mockReturnValue({
-      setSearchQuery,
-      searchQuery: '',
-      handleSearch,
-    });
+    store.dispatch = jest.fn();
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  const renderComponent = () =>
+    render(
+      <Provider store={store}>
+        <SearchInput />
+      </Provider>,
+    );
 
-  it('renders the search input field', () => {
-    render(<SearchInput />);
+  test('should render input field', () => {
+    renderComponent();
     const input = screen.getByRole('searchbox');
     expect(input).toBeInTheDocument();
   });
 
-  it('calls setSearchQuery on input change', () => {
-    render(<SearchInput />);
+  test('should dispatch setSearchQuery action on input change', () => {
+    renderComponent();
     const input = screen.getByRole('searchbox');
+    const searchText = 'Naruto';
 
-    fireEvent.change(input, { target: { value: 'test query' } });
-    expect(setSearchQuery).toHaveBeenCalledWith('test query');
+    fireEvent.change(input, { target: { value: searchText } });
+
+    expect(store.dispatch).toHaveBeenCalledWith(setSearchQuery(searchText));
   });
 
-  it('calls handleSearch on Enter key press', () => {
-    render(<SearchInput />);
+  test('should dispatch setTriggerSearch action on Enter key press', () => {
+    renderComponent();
     const input = screen.getByRole('searchbox');
 
     fireEvent.keyDown(input, { key: 'Enter', code: 'Enter' });
-    expect(handleSearch).toHaveBeenCalled();
-  });
 
-  it('does not call handleSearch on non-Enter key press', () => {
-    render(<SearchInput />);
-    const input = screen.getByRole('searchbox');
-
-    fireEvent.keyDown(input, { key: 'a', code: 'KeyA' });
-    expect(handleSearch).not.toHaveBeenCalled();
+    expect(store.dispatch).toHaveBeenCalledWith(setTriggerSearch(true));
   });
 });

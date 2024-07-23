@@ -6,7 +6,7 @@ import { RootState } from '../../../store/strore';
 import { Character } from '../../../types/characterResponse';
 
 interface CheckboxProps {
-  character: Character; // Принимаем весь объект персонажа
+  character: Character;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ character }) => {

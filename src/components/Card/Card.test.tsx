@@ -9,8 +9,8 @@ import configureStore from 'redux-mock-store';
 const mockStore = configureStore([]);
 const store = mockStore({
   selectedItems: {
-    selectedItems: []
-  }
+    selectedItems: [],
+  },
 });
 
 const mockCharacter: Character = {
@@ -24,7 +24,7 @@ const mockCharacter: Character = {
 
 const mockCharacterWithoutImage: Character = {
   ...mockCharacter,
-  images: []
+  images: [],
 };
 
 describe('Card component', () => {
@@ -34,7 +34,7 @@ describe('Card component', () => {
         <AppProvider>
           <Card character={mockCharacter} onClick={jest.fn()} />
         </AppProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByText(mockCharacter.name)).toBeInTheDocument();
@@ -47,7 +47,7 @@ describe('Card component', () => {
         <AppProvider>
           <Card character={mockCharacterWithoutImage} onClick={jest.fn()} />
         </AppProvider>
-      </Provider>
+      </Provider>,
     );
 
     expect(screen.getByTestId('noPhotoComponent')).toBeInTheDocument();
@@ -61,7 +61,7 @@ describe('Card component', () => {
         <AppProvider>
           <Card character={mockCharacter} onClick={handleClick} />
         </AppProvider>
-      </Provider>
+      </Provider>,
     );
 
     fireEvent.click(screen.getByRole('article'));
@@ -75,7 +75,7 @@ describe('Card component', () => {
         <AppProvider>
           <Card character={mockCharacter} onClick={jest.fn()} />
         </AppProvider>
-      </Provider>
+      </Provider>,
     );
 
     const checkbox = screen.getByRole('checkbox');
