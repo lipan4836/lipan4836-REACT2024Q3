@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { Character } from '../../types/characterResponse'; // Импортируйте тип Character
+import { Character } from '../../types/characterResponse';
 
 interface SelectedItemsState {
   selectedItems: Character[];
