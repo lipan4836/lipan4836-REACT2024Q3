@@ -8,8 +8,11 @@ import { removeAllItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';
 import { RootState } from '../../store/store';
 import apiService from '../../store/slices/apiSlice';
+import useAppContext from '../AppContext/useAppContext';
 
 const mockStore = configureStore<RootState>([]);
+
+jest.mock('../AppContext/useAppContext');
 
 const mockCharacter: Character = {
   id: 1,
@@ -52,6 +55,7 @@ describe('Flyout component', () => {
     });
 
     store.dispatch = jest.fn();
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
   });
 
   test('renders Flyout component with one selected item', () => {
@@ -102,6 +106,8 @@ describe('Flyout component', () => {
   });
 
   test('"Download" button click works', () => {
+    URL.createObjectURL = jest.fn(() => 'mocked-url');
+
     render(
       <Provider store={store}>
         <AppProvider>
@@ -115,5 +121,44 @@ describe('Flyout component', () => {
 
     expect(downloadButton.closest('a')).toHaveAttribute('href', 'mocked-url');
     expect(downloadButton.closest('a')).toHaveAttribute('download', '1_characters.csv');
+  });
+
+  test('handles dark theme correctly', () => {
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: true });
+
+    render(
+      <Provider store={store}>
+        <AppProvider>
+          <Flyout />
+        </AppProvider>
+      </Provider>,
+    );
+
+    const unselectButton = screen.getByText('Unselect all');
+    const downloadButton = screen.getByText('Download');
+
+    expect(unselectButton).toHaveClass('dark_btn');
+    expect(downloadButton).toHaveClass('dark_btn');
+  });
+
+  test('handles no selected items', () => {
+    store = mockStore({
+      selectedItems: {
+        selectedItems: [],
+      },
+      search: initialSearchState,
+      page: initialPageState,
+      [apiService.reducerPath]: apiService.reducer(undefined, { type: '' }),
+    });
+
+    render(
+      <Provider store={store}>
+        <AppProvider>
+          <Flyout />
+        </AppProvider>
+      </Provider>,
+    );
+
+    expect(screen.getByText('0 items are selected')).toBeInTheDocument();
   });
 });
