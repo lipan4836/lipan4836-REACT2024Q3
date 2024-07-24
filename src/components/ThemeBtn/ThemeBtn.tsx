@@ -8,7 +8,11 @@ function ThemeBtn() {
 
   return (
     <button className="themeBtn" onClick={toggleTheme}>
-      <img className="themeBtn_img" src={darkTheme ? light : dark} alt="theme button" />
+      <img
+        className="themeBtn_img"
+        src={darkTheme ? light : dark}
+        alt={darkTheme ? 'switcher to light theme' : 'switcher to dark theme'}
+      />
     </button>
   );
 }

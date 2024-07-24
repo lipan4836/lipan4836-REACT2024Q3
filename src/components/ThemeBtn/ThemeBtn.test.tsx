@@ -26,4 +26,26 @@ describe('Theme button', () => {
     fireEvent.click(screen.getByRole('button'));
     expect(toggleTheme).toHaveBeenCalled();
   });
+
+  it('displays light theme icon with correct alt text when darkTheme is true', () => {
+    (useAppContext as jest.Mock).mockReturnValue({
+      darkTheme: true,
+      toggleTheme: jest.fn(),
+    });
+
+    render(<ThemeBtn />);
+    const icon = screen.getByRole('img') as HTMLImageElement;
+    expect(icon.alt).toBe('switcher to light theme');
+  });
+
+  it('displays dark theme icon with correct alt text when darkTheme is false', () => {
+    (useAppContext as jest.Mock).mockReturnValue({
+      darkTheme: false,
+      toggleTheme: jest.fn(),
+    });
+
+    render(<ThemeBtn />);
+    const icon = screen.getByRole('img') as HTMLImageElement;
+    expect(icon.alt).toBe('switcher to dark theme');
+  });
 });

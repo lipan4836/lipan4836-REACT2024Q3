@@ -56,7 +56,7 @@ describe('SearchBlock component', () => {
       </Provider>,
     );
 
-    fireEvent.click(screen.getByAltText('theme button'));
+    fireEvent.click(screen.getByAltText('switcher to dark theme'));
     expect(mockToggleTheme).toHaveBeenCalled();
   });
 });
