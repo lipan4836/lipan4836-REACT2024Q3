@@ -5,6 +5,7 @@ import { Character } from '../../types/characterResponse';
 import AppProvider from '../AppContext/AppProvider';
 import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
+import useAppContext from '../AppContext/useAppContext';
 
 const mockStore = configureStore([]);
 const store = mockStore({
@@ -27,7 +28,13 @@ const mockCharacterWithoutImage: Character = {
   images: [],
 };
 
+jest.mock('../AppContext/useAppContext');
+
 describe('Card component', () => {
+  beforeEach(() => {
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
+  });
+
   test('renders the relevant card data', () => {
     render(
       <Provider store={store}>
@@ -83,5 +90,33 @@ describe('Card component', () => {
 
     fireEvent.click(checkbox);
     expect(store.getActions()).toEqual([{ type: 'selectedItems/addItem', payload: mockCharacter }]);
+  });
+
+  test('applies dark theme class when darkTheme is true', () => {
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: true });
+    render(
+      <Provider store={store}>
+        <AppProvider>
+          <Card character={mockCharacter} onClick={jest.fn()} />
+        </AppProvider>
+      </Provider>,
+    );
+
+    const article = screen.getByRole('article');
+    expect(article).toHaveClass('charDark');
+  });
+
+  test('does not apply dark theme class when darkTheme is false', () => {
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
+    render(
+      <Provider store={store}>
+        <AppProvider>
+          <Card character={mockCharacter} onClick={jest.fn()} />
+        </AppProvider>
+      </Provider>,
+    );
+
+    const article = screen.getByRole('article');
+    expect(article).not.toHaveClass('charDark');
   });
 });
