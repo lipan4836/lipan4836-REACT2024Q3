@@ -1,12 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit';
-import searchReducer from './slices/searchSlice';
-import pageReducer from './slices/pageSlice';
+import searchReducer, { setTriggerSearch } from './slices/searchSlice';
+import pageReducer, { setCurrentPage } from './slices/pageSlice';
 import apiService from './slices/apiSlice';
-import selectedItemsReducer from './slices/selectedItemsSlice';
+import selectedItemsReducer, { addItem, removeAllItems } from './slices/selectedItemsSlice';
+import { store, RootState } from './strore';
 
-describe('Redux Store Configuration', () => {
-  it('should create a store with the correct reducers and middleware', () => {
-    const store = configureStore({
+describe('Redux Store', () => {
+  it('should configure the store with the correct reducers and middleware', () => {
+    const testStore = configureStore({
       reducer: {
         [apiService.reducerPath]: apiService.reducer,
         selectedItems: selectedItemsReducer,
@@ -16,16 +17,39 @@ describe('Redux Store Configuration', () => {
       middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(apiService.middleware),
     });
 
-    const state = store.getState();
+    expect(testStore.getState()).toEqual(store.getState());
+  });
 
-    expect(state).toHaveProperty(apiService.reducerPath);
-    expect(state).toHaveProperty('selectedItems');
-    expect(state).toHaveProperty('search');
-    expect(state).toHaveProperty('page');
+  it('should handle actions correctly in searchSlice', () => {
+    let state: RootState = store.getState();
+    store.dispatch(setTriggerSearch(true));
+    state = store.getState();
+    expect(state.search.triggerSearch).toBe(true);
+  });
 
-    type AppDispatch = typeof store.dispatch;
+  it('should handle actions correctly in pageSlice', () => {
+    let state: RootState = store.getState();
+    store.dispatch(setCurrentPage(2));
+    state = store.getState();
+    expect(state.page.currentPage).toBe(2);
+  });
 
-    const dispatch: AppDispatch = store.dispatch;
-    expect(typeof dispatch).toBe('function');
+  it('should handle actions correctly in selectedItemsSlice', () => {
+    const character = {
+      id: 1,
+      name: 'Character 1',
+      images: [],
+      jutsu: [],
+      personal: { sex: 'male' },
+      rank: { ninjaRank: {} },
+    };
+    let state: RootState = store.getState();
+    store.dispatch(addItem(character));
+    state = store.getState();
+    expect(state.selectedItems.selectedItems).toContainEqual(character);
+
+    store.dispatch(removeAllItems());
+    state = store.getState();
+    expect(state.selectedItems.selectedItems).toHaveLength(0);
   });
 });
