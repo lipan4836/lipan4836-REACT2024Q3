@@ -111,7 +111,7 @@ describe('MainContent component', () => {
     });
 
     await waitFor(() => {
-      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(1);
+      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(2);
       expect(screen.getAllByRole('article')).toHaveLength(mockResponse.characters.length);
     });
   });
@@ -145,7 +145,7 @@ describe('MainContent component', () => {
     });
 
     await waitFor(() => {
-      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(1);
+      expect(useFetchCharactersQuery).toHaveBeenCalledTimes(2);
       expect(
         screen.getByText(/Sorry, but there is no such character in the Naruto universe./i),
       ).toBeInTheDocument();
