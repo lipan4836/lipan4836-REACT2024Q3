@@ -1,92 +1,93 @@
 import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
-import '@testing-library/jest-dom';
+import { store } from './store/store';
 import App from './App';
+import MainContent from './components/Main/MainContent';
+import NotFoundPage from './components/NotFoundPage/NotFoundPage';
+import CardDetail from './components/CardDetail/CardDetail';
 import ErrorBoundary from './components/ErrorBoundary/ErrorBoundary';
 import ErrorContent from './components/ErrorBoundary/ErrorContent';
-import NotFoundPage from './components/NotFoundPage/NotFoundPage';
-import MainContent from './components/Main/MainContent';
-import CardDetail from './components/CardDetail/CardDetail';
-import { ReactNode } from 'react';
 
-jest.mock('./components/Header/Header', () => {
-  return {
-    __esModule: true,
-    default: () => <div>Mocked Header</div>,
-  };
-});
-jest.mock('./components/AppContext/AppProvider', () => {
-  return {
-    __esModule: true,
-    default: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-  };
-});
-jest.mock('./components/ErrorBoundary/ErrorBoundary', () => {
-  return {
-    __esModule: true,
-    default: ({ children }: { children: ReactNode }) => <div>{children}</div>,
-  };
-});
-jest.mock('./components/ErrorBoundary/ErrorContent', () => {
-  return {
-    __esModule: true,
-    default: () => <div>Mocked Error Content</div>,
-  };
-});
-jest.mock('./components/NotFoundPage/NotFoundPage', () => {
-  return {
-    __esModule: true,
-    default: () => <div>Mocked Not Found Page</div>,
-  };
-});
-jest.mock('./components/Main/MainContent', () => {
-  return {
-    __esModule: true,
-    default: () => <div>Mocked Main Content</div>,
-  };
-});
-jest.mock('./components/CardDetail/CardDetail', () => {
-  return {
-    __esModule: true,
-    default: () => <div>Mocked Card Detail</div>,
-  };
-});
+describe('App Routing', () => {
+  const renderWithProviders = (ui: React.ReactElement, { route = '/' } = {}) => {
+    window.history.pushState({}, 'Test page', route);
 
-describe('Check all routes', () => {
-  const renderRoutes = (initialEntries = ['/']) => {
     return render(
-      <MemoryRouter initialEntries={initialEntries}>
-        <ErrorBoundary fallback={<ErrorContent error={null} errorInfo={null} />}>
-          <Routes>
-            <Route path="/" element={<App />}>
-              <Route index element={<MainContent />} />
-              <Route path="page/:pageId" element={<MainContent />} />
-              <Route path="page/:pageId/details/:id" element={<CardDetail />} />
-              <Route path="*" element={<NotFoundPage />} />
-            </Route>
-          </Routes>
-        </ErrorBoundary>
-      </MemoryRouter>,
+      <Provider store={store}>
+        <MemoryRouter initialEntries={[route]}>
+          <ErrorBoundary fallback={<ErrorContent error={null} errorInfo={null} />}>
+            {ui}
+          </ErrorBoundary>
+        </MemoryRouter>
+      </Provider>,
     );
   };
 
-  it('should render MainContent at the root path', () => {
-    renderRoutes(['/']);
-    expect(screen.getByText('Mocked Main Content')).toBeInTheDocument();
+  test('renders MainContent at default route /', () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route index element={<MainContent />} />
+        </Route>
+      </Routes>,
+    );
+    expect(screen.getByRole('heading')).toBeInTheDocument();
   });
 
-  it('should render MainContent with pageId path', () => {
-    renderRoutes(['/page/1']);
-    expect(screen.getByText('Mocked Main Content')).toBeInTheDocument();
+  test('renders MainContent at route /page/:pageId', () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="page/:pageId" element={<MainContent />} />
+        </Route>
+      </Routes>,
+      { route: '/page/1' },
+    );
+    expect(screen.getByRole('heading')).toBeInTheDocument();
   });
 
-  it('should render CardDetail for details route', () => {
-    renderRoutes(['/page/1/details/123']);
-    expect(screen.getByText('Mocked Card Detail')).toBeInTheDocument();
+  test('renders CardDetail at route /page/:pageId/details/:id', () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="page/:pageId" element={<MainContent />}>
+            <Route path="details/:id" element={<CardDetail />} />
+          </Route>
+        </Route>
+      </Routes>,
+      { route: '/page/1/details/123' },
+    );
+    expect(screen.getByRole('button', { name: '1' })).toBeInTheDocument();
   });
 
-  it('should render NotFoundPage for unknown routes', () => {
-    renderRoutes(['/unknown']);
-    expect(screen.getByText('Mocked Not Found Page')).toBeInTheDocument();
+  test('renders NotFoundPage at unknown route', () => {
+    renderWithProviders(
+      <Routes>
+        <Route path="/" element={<App />}>
+          <Route path="*" element={<NotFoundPage />} />
+        </Route>
+      </Routes>,
+      { route: '/unknown' },
+    );
+    expect(
+      screen.getByText(/Looks like you were lost. There is no such page./i),
+    ).toBeInTheDocument();
+  });
+
+  test('renders ErrorContent when an error occurs', () => {
+    const ErrorComponent = () => {
+      throw new Error('Test error');
+    };
+
+    renderWithProviders(
+      <ErrorBoundary fallback={<ErrorContent error={null} errorInfo={null} />}>
+        <ErrorComponent />
+      </ErrorBoundary>,
+    );
+
+    expect(
+      screen.getByText(/Ooops!.. Something gone wrong. Please, reload page/i),
+    ).toBeInTheDocument();
   });
 });

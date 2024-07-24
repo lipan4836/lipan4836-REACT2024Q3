@@ -22,7 +22,7 @@ function CardDetail() {
 
   return (
     <div className="detailsWrap">
-      <div className="characterDetails">
+      <article className="characterDetails">
         <button className="closePage" onClick={handleClosePage}>
           <img src={closeBtn} alt="close details" className="closePage_img" />
         </button>
@@ -64,7 +64,7 @@ function CardDetail() {
             <p className="charDetail_debut_type">Game: {character.debut.game}</p>
           )}
         </div>
-      </div>
+      </article>
     </div>
   );
 }

@@ -13,7 +13,7 @@ jest.mock('../AppContext/useAppContext');
 
 describe('NotFoundPage component', () => {
   beforeEach(() => {
-    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false }); // Установка значения по умолчанию
+    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
   });
 
   test('clicking the Go back button calls navigate with -1', () => {
