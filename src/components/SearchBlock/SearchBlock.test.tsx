@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import configureStore from 'redux-mock-store';
 import SearchBlock from './SearchBlock';
 import { setSearchQuery } from '../../store/slices/searchSlice';
-import { RootState } from '../../store/strore';
+import { RootState } from '../../store/store';
 import AppContext from '../AppContext/AppContext';
 
 const mockStore = configureStore<Partial<RootState>>([]);

@@ -1,4 +1,4 @@
-import { RootState } from '../../store/strore';
+import { RootState } from '../../store/store';
 import { useAppSelector } from '../../hooks/hooksRedux';
 import useAppContext from '../AppContext/useAppContext';
 import './Flyout.scss';

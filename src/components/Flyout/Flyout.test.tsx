@@ -6,7 +6,7 @@ import Flyout from './Flyout';
 import AppProvider from '../AppContext/AppProvider';
 import { removeAllItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';
-import { RootState } from '../../store/strore';
+import { RootState } from '../../store/store';
 import apiService from '../../store/slices/apiSlice';
 
 const mockStore = configureStore<RootState>([]);

@@ -9,7 +9,7 @@ import NotFoundPage from './components/NotFoundPage/NotFoundPage.tsx';
 import MainContent from './components/Main/MainContent.tsx';
 import CardDetail from './components/CardDetail/CardDetail.tsx';
 import { Provider } from 'react-redux';
-import { store } from './store/strore.ts';
+import { store } from './store/store.ts';
 
 const router = createBrowserRouter([
   {

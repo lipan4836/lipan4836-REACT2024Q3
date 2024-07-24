@@ -3,7 +3,7 @@ import searchReducer, { setTriggerSearch } from './slices/searchSlice';
 import pageReducer, { setCurrentPage } from './slices/pageSlice';
 import apiService from './slices/apiSlice';
 import selectedItemsReducer, { addItem, removeAllItems } from './slices/selectedItemsSlice';
-import { store, RootState } from './strore';
+import { store, RootState } from './store';
 
 describe('Redux Store', () => {
   it('should configure the store with the correct reducers and middleware', () => {

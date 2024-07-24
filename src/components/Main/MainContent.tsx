@@ -12,7 +12,7 @@ import { useFetchCharactersQuery } from '../../store/slices/apiSlice';
 import { setCurrentPage } from '../../store/slices/pageSlice';
 import { setSelectedItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';
-import { RootState } from '../../store/strore';
+import { RootState } from '../../store/store';
 import Flyout from '../Flyout/Flyout';
 
 function MainContent() {

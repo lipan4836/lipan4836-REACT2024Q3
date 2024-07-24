@@ -4,7 +4,7 @@ import configureStore, { MockStoreEnhanced } from 'redux-mock-store';
 import Checkbox from './Checkbox';
 import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
 import { Character } from '../../../types/characterResponse';
-import { RootState } from '../../../store/strore';
+import { RootState } from '../../../store/store';
 
 const mockStore = configureStore<Partial<RootState>>([]);
 

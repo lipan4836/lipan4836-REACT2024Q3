@@ -2,7 +2,7 @@ import React from 'react';
 import './Checkbox.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
-import { RootState } from '../../../store/strore';
+import { RootState } from '../../../store/store';
 import { Character } from '../../../types/characterResponse';
 
 interface CheckboxProps {
