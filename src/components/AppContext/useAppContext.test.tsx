@@ -21,18 +21,8 @@ describe('useAppContext', () => {
   });
 
   test('throws error when used outside of AppProvider', () => {
-    const { result } = renderHook(() => {
-      try {
-        return useAppContext();
-      } catch (error) {
-        return error;
-      }
-    });
-
-    if (result.current instanceof Error) {
-      expect(result.current.message).toBe('useAppContext must be used within an AppProvider');
-    } else {
-      throw new Error('Expected error to be an instance of Error');
-    }
+    expect(() => {
+      renderHook(() => useAppContext());
+    }).toThrow('useAppContext must be used within an AppProvider');
   });
 });

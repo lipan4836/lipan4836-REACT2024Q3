@@ -57,6 +57,13 @@ function MainContent() {
     localStorage.setItem('selectedItems', JSON.stringify(selectedItems));
   }, [selectedItems]);
 
+  useEffect(() => {
+    if (data) {
+      dispatch(setCurrentPage(page));
+      navigate(`/page/${page}`, { replace: true });
+    }
+  }, [data, dispatch, navigate, page]);
+
   const handleCardClick = (id: number) => {
     navigate(`details/${id}`);
   };

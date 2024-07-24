@@ -1,13 +1,9 @@
-.main {
-  align-items: center;
-}
-
 .notFoundCharWrap {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: auto;
+  margin: 32px auto;
 
   .notFoundChar {
     width: 370px;
