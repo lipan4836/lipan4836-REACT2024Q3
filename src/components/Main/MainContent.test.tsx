@@ -156,7 +156,7 @@ describe('MainContent component', () => {
     (useFetchCharactersQuery as jest.Mock).mockReturnValue({
       data: undefined,
       error: null,
-      isLoading: true,
+      isFetching: true,
     });
 
     await act(async () => {

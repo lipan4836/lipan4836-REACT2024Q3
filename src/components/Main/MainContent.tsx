@@ -27,7 +27,7 @@ function MainContent() {
   const page = pageId ? +pageId : 1;
   const limit = 6;
 
-  const { data, error, isLoading } = useFetchCharactersQuery({
+  const { data, error, isFetching } = useFetchCharactersQuery({
     page,
     limit,
     searchQuery: searchQuery,
@@ -74,7 +74,7 @@ function MainContent() {
     }
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return <Loader />;
   }
 
