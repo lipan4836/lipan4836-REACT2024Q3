@@ -1,0 +1,36 @@
+.themeBtn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  border: none;
+  margin-left: 16px;
+  background: transparent;
+
+  &_img {
+    width: 30px;
+    transition: all 0.3s ease-in;
+
+    &:hover {
+      transform: scale(1.2);
+    }
+
+    &:active {
+      animation-name: rotation-btn;
+      animation-duration: 0.2s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+    }
+  }
+}
+
+@keyframes rotation-btn {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
