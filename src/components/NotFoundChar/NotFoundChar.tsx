@@ -1,5 +1,3 @@
-import './NotFoundChar.scss';
-
 function NotFoundChar() {
   return (
     <div className="notFoundCharWrap">

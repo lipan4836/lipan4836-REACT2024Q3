@@ -1,5 +1,4 @@
 import useAppContext from '../AppContext/useAppContext';
-import './Loader.scss';
 
 function Loader() {
   const { darkTheme } = useAppContext();

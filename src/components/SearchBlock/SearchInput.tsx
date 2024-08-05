@@ -1,5 +1,4 @@
 import { ChangeEvent } from 'react';
-import './SearchBlock.scss';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooksRedux';
 import { setSearchQuery, setTriggerSearch } from '../../store/slices/searchSlice';
 

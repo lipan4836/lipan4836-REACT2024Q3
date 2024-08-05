@@ -1,5 +1,4 @@
 import { Character } from '../../types/characterResponse';
-import './Card.scss';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import useAppContext from '../AppContext/useAppContext';
 import Checkbox from './Checkbox/Checkbox';

@@ -1,5 +1,3 @@
-import './noPhoto.scss';
-
 function NoPhoto() {
   return (
     <div className="noPhoto" data-testid="noPhotoComponent">

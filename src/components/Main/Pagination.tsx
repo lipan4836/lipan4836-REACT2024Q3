@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import './mainContent.scss';
 
 interface PaginationProps {
   totalPages: number;

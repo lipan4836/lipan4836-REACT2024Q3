@@ -1,5 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import './NotFoundPage.scss';
 import useAppContext from '../AppContext/useAppContext';
 
 function NotFoundPage() {

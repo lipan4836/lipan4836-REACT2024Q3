@@ -1,7 +1,6 @@
 import { RootState } from '../../store/store';
 import { useAppSelector } from '../../hooks/hooksRedux';
 import useAppContext from '../AppContext/useAppContext';
-import './Flyout.scss';
 import { useDispatch } from 'react-redux';
 import { removeAllItems } from '../../store/slices/selectedItemsSlice';
 import { Character } from '../../types/characterResponse';

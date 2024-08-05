@@ -1,5 +1,4 @@
 import React from 'react';
-import './Checkbox.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
 import { RootState } from '../../../store/store';

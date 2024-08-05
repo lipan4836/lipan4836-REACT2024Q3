@@ -1,7 +1,6 @@
 import dark from '../../assets/svg/btn-dark.svg';
 import light from '../../assets/svg/btn-light.svg';
 import useAppContext from '../AppContext/useAppContext';
-import './ThemeBtn.scss';
 
 function ThemeBtn() {
   const { darkTheme, toggleTheme } = useAppContext();

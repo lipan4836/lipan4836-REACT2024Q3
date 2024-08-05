@@ -1,4 +1,3 @@
-import './mainContent.scss';
 import Card from '../Card/Card';
 import Loader from '../Loader/Loader';
 import NotFoundChar from '../NotFoundChar/NotFoundChar';

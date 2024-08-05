@@ -1,5 +1,4 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import './CardDetail.scss';
 import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import closeBtn from '../../assets/svg/close.svg';

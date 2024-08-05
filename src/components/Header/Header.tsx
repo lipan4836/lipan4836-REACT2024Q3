@@ -1,4 +1,3 @@
-import './header.scss';
 import SearchBlock from '../SearchBlock/SearchBlock';
 import useAppContext from '../AppContext/useAppContext';
 
