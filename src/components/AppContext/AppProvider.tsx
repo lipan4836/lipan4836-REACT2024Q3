@@ -20,7 +20,7 @@ const AppProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const removeItem = (id: number) => {
-    setSelectedItems((prevItems) => prevItems.filter(item => item.id !== id));
+    setSelectedItems((prevItems) => prevItems.filter((item) => item.id !== id));
   };
 
   const clearItems = () => {

@@ -15,7 +15,14 @@ interface MainContentProps {
   searchQuery: string;
 }
 
-const MainContent: React.FC<MainContentProps> = ({ characters, totalPages, isFetching, error, currentPage, searchQuery }) => {
+const MainContent: React.FC<MainContentProps> = ({
+  characters,
+  totalPages,
+  isFetching,
+  error,
+  currentPage,
+  searchQuery,
+}) => {
   // const { darkTheme, selectedItems } = useAppContext();
 
   if (isFetching) {
@@ -31,8 +38,8 @@ const MainContent: React.FC<MainContentProps> = ({ characters, totalPages, isFet
   // }
 
   const handleClosePage = () => {
-    console.log('close card')
-  }
+    console.log('close card');
+  };
 
   return (
     <main className={'main'}>

@@ -1,4 +1,4 @@
-import { Character } from "./characterResponse";
+import { Character } from './characterResponse';
 
 interface AppContextProps {
   darkTheme: boolean;

@@ -45,7 +45,7 @@ function Page({ characters, totalPages, currentPage, searchQuery }: PageProps) {
           </div>
           <Pagination totalPages={totalPages} currentPage={currentPage} searchQuery={searchQuery} />
         </div>
-        
+        {/* тут нужен компонент CardDetail, который показывается при нажатии на какую-то карточку */}
       </main>
     </>
   );

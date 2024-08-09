@@ -1,11 +1,42 @@
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Image from 'next/image';
+import searchLogo from '../../assets/svg/btn-search.svg';
+
 function Header() {
+  const [searchQuery, setSearchQuery] = useState('');
+  const router = useRouter();
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      router.push(`/page/1?searchQuery=${searchQuery}`);
+    } else {
+      router.push('/page/1');
+    }
+  };
+
   return (
     <header className={'header'}>
       <div className="headerCont">
         <h1 className={'h1'}>naruto characters base</h1>
-        <div className="searchBlock">
-          <input type="search" className="searchBlock_input" />
-        </div>
+        <form className="searchBlock" onSubmit={handleSearch}>
+          <input
+            type="search"
+            className="searchBlock_input"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <button className="searchBlock_btn" type="submit">
+            <Image
+              src={searchLogo}
+              alt="search"
+              className="searchBlock_btn__img"
+              width={32}
+              height={32}
+            />
+          </button>
+        </form>
       </div>
     </header>
   );
