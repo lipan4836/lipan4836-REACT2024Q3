@@ -3,6 +3,8 @@ import closeBtn from '../../assets/svg/close.svg';
 import { useRouter } from 'next/router';
 import { Character } from '../../types/characterResponse';
 import Image from 'next/image';
+import useOutsideClick from '../../hooks/useOutsideClick';
+import { useRef } from 'react';
 
 type CardDetailProps = {
   character: Character;
@@ -10,6 +12,7 @@ type CardDetailProps = {
 
 function CardDetail({ character }: CardDetailProps) {
   const router = useRouter();
+  const detailRef = useRef<HTMLDivElement>(null);
 
   const handleClosePage = () => {
     router.push({
@@ -18,8 +21,12 @@ function CardDetail({ character }: CardDetailProps) {
     });
   };
 
+  useOutsideClick(detailRef, () => {
+    handleClosePage();
+  });
+
   return (
-    <div className="detailsWrap">
+    <div className="detailsWrap" ref={detailRef}>
       <article className="characterDetails">
         <button className="closePage" onClick={handleClosePage}>
           <Image src={closeBtn} alt="close details" className="closePage_img" />
