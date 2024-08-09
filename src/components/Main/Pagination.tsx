@@ -1,20 +1,27 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 interface PaginationProps {
   totalPages: number;
+  currentPage: number;
+  searchQuery: string;
 }
 
-function Pagination({ totalPages }: PaginationProps) {
-  const { pageId } = useParams<{ pageId: string }>();
-  const currentPage = pageId ? parseInt(pageId, 10) : 1;
-  const navigate = useNavigate();
-  const maxPageButtons = 10;
+function Pagination({ totalPages, currentPage, searchQuery }: PaginationProps) {
+  const router = useRouter();
 
   const handlePageChange = (page: number) => {
-    navigate(`/page/${page}`);
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page,
+        searchQuery,
+      },
+    });
   };
 
   const renderPageNumbers = () => {
+    const maxPageButtons = 10;
     const startPage = Math.max(1, currentPage - Math.floor(maxPageButtons / 2));
     const endPage = Math.min(totalPages, startPage + maxPageButtons - 1);
     const pages = [];

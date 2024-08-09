@@ -1,14 +1,11 @@
-import SearchBlock from '../SearchBlock/SearchBlock';
-import useAppContext from '../AppContext/useAppContext';
-
 function Header() {
-  const { darkTheme } = useAppContext();
-
   return (
-    <header className={darkTheme ? 'headerDark' : 'header'}>
+    <header className={'header'}>
       <div className="headerCont">
-        <h1 className={darkTheme ? 'h1Dark' : 'h1'}>naruto characters base</h1>
-        <SearchBlock />
+        <h1 className={'h1'}>naruto characters base</h1>
+        <div className="searchBlock">
+          <input type="search" className="searchBlock_input" />
+        </div>
       </div>
     </header>
   );

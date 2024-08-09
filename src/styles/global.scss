@@ -48,3 +48,16 @@ body {
   border: 2px solid #59180b;
   border-radius: 100vw;
 }
+
+@import '../components/Card/Card.scss';
+@import '../components/Card/Checkbox/Checkbox.scss';
+@import '../components/CardDetail/CardDetail.scss';
+@import '../components/Flyout/Flyout.scss';
+@import '../components/Header/header.scss';
+@import '../components/Loader/Loader.scss';
+@import '../components/Main/mainContent.scss';
+@import '../components/NoPhoto/noPhoto.scss';
+@import '../components/NotFoundChar/NotFoundChar.scss';
+@import '../components/NotFoundPage/NotFoundPage.scss';
+@import '../components/SearchBlock/SearchBlock.scss';
+@import '../components/ThemeBtn/ThemeBtn.scss';

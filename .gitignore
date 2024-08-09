@@ -16,7 +16,6 @@ dist-ssr
 # Next
 .next
 next-env.d.ts
-dist
 
 # Editor directories and files
 .vscode/*
