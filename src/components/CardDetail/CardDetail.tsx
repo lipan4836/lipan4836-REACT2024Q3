@@ -1,29 +1,28 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import Loader from '../Loader/Loader';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import closeBtn from '../../assets/svg/close.svg';
-import { useFetchCharacterByIdQuery } from '../../store/slices/apiSlice';
+import { useRouter } from 'next/router';
+import { Character } from '../../types/characterResponse';
+import Image from 'next/image';
 
-function CardDetail() {
-  const { id, pageId } = useParams<{ id: string; pageId: string }>();
-  const navigate = useNavigate();
-  const { data: character, error, isLoading } = useFetchCharacterByIdQuery(Number(id));
+type CardDetailProps = {
+  character: Character;
+};
+
+function CardDetail({ character }: CardDetailProps) {
+  const router = useRouter();
 
   const handleClosePage = () => {
-    navigate(`/page/${pageId}`);
+    router.push({
+      pathname: `/page/${router.query.page}`,
+      query: { searchQuery: router.query.searchQuery },
+    });
   };
-
-  if (isLoading) return <Loader />;
-
-  if (error) return <div>Error: {error.toString()}</div>;
-
-  if (!character) return <div>No character found</div>;
 
   return (
     <div className="detailsWrap">
       <article className="characterDetails">
         <button className="closePage" onClick={handleClosePage}>
-          <img src={closeBtn} alt="close details" className="closePage_img" />
+          <Image src={closeBtn} alt="close details" className="closePage_img" />
         </button>
         <h2 className="charDetail_name">{character.name}</h2>
         {character.images.length ? (
