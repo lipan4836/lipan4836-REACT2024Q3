@@ -1,5 +1,4 @@
 import NoPhoto from '../NoPhoto/NoPhoto';
-import closeBtn from '../../assets/svg/close.svg';
 import { useRouter } from 'next/router';
 import { Character } from '../../types/characterResponse';
 import Image from 'next/image';
@@ -29,7 +28,13 @@ function CardDetail({ character }: CardDetailProps) {
     <div className="detailsWrap" ref={detailRef}>
       <article className="characterDetails">
         <button className="closePage" onClick={handleClosePage}>
-          <Image src={closeBtn} alt="close details" className="closePage_img" />
+          <Image
+            src="/close.svg"
+            alt="close details"
+            className="closePage_img"
+            width={64}
+            height={64}
+          />
         </button>
         <h2 className="charDetail_name">{character.name}</h2>
         {character.images.length ? (

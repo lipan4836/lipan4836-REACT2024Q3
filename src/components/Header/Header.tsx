@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
-import searchLogo from '../../assets/svg/btn-search.svg';
 import ThemeBtn from '../ThemeBtn/ThemeBtn';
 import { useAppSelector } from '../../hooks/hooksRedux';
 
@@ -32,7 +31,7 @@ function Header() {
           />
           <button className="searchBlock_btn" type="submit">
             <Image
-              src={searchLogo}
+              src="/btn-search.svg"
               alt="search"
               className="searchBlock_btn__img"
               width={32}

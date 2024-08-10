@@ -1,0 +1,48 @@
+.headerCont {
+  max-width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+  padding: 8px 0;
+
+  @media (max-width: 620px) {
+    flex-direction: column;
+  }
+
+  .reloadBtn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+  }
+}
+
+.searchBlock {
+  display: flex;
+
+  &_input,
+  &_btn {
+    height: 37px;
+    border: none;
+  }
+
+  &_input {
+    border-radius: 6px 0px 0px 6px;
+    padding-left: 8px;
+  }
+
+  &_btn {
+    border-radius: 0px 6px 6px 0px;
+    cursor: pointer;
+    background: #e4e4e4;
+    transition: all 0.2s ease-in;
+
+    &:hover {
+      background: #9bc6da;
+    }
+
+    &__img {
+      width: 32px;
+    }
+  }
+}

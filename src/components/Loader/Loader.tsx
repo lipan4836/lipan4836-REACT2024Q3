@@ -1,7 +1,7 @@
-import useAppContext from '../AppContext/useAppContext';
+import { useAppSelector } from '../../hooks/hooksRedux';
 
 function Loader() {
-  const { darkTheme } = useAppContext();
+  const darkTheme = useAppSelector((state) => state.theme.darkTheme);
 
   return (
     <div className={darkTheme ? 'loaderWrap loaderWrapDark' : 'loaderWrap'} data-testid="loader">
