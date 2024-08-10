@@ -13,6 +13,14 @@ const config: Config = {
   // Add more setup options before each test is run
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   preset: 'ts-jest',
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  collectCoverageFrom: [
+    'src/**/*.{ts,tsx}', // Включаем все файлы .ts и .tsx из папки src
+    '!src/**/*.d.ts', // Исключаем файлы с типами
+    '!src/**/__tests__/**', // Исключаем тестовые файлы
+    '!src/**/?(*.)+(spec|test).[jt]s?(x)', // Исключаем файлы тестов с расширениями .spec и .test
+  ],
 }
  
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
