@@ -1,18 +1,21 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
-import { RootState } from '../../../store/store';
 import { Character } from '../../../types/characterResponse';
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooksRedux';
+import { addItem, removeItem } from '../../../store/slices/selectedItemsSlice';
 
 interface CheckboxProps {
   character: Character;
 }
 
 const Checkbox: React.FC<CheckboxProps> = ({ character }) => {
-  const dispatch = useDispatch();
-  const isSelected = useSelector((state: RootState) =>
+  const dispatch = useAppDispatch();
+  const isSelected = useAppSelector((state) =>
     state.selectedItems.selectedItems.some((item) => item.id === character.id),
   );
+
+  const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
+    event.stopPropagation();
+  };
 
   const handleCheckboxChange = () => {
     if (isSelected) {
@@ -20,10 +23,6 @@ const Checkbox: React.FC<CheckboxProps> = ({ character }) => {
     } else {
       dispatch(addItem(character));
     }
-  };
-
-  const handleCheckboxClick = (event: React.MouseEvent<HTMLInputElement>) => {
-    event.stopPropagation();
   };
 
   return (

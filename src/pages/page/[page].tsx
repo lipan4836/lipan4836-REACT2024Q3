@@ -7,6 +7,8 @@ import Card from '../../components/Card/Card';
 import Pagination from '../../components/Main/Pagination';
 import { useRouter } from 'next/router';
 import CardDetail from '../../components/CardDetail/CardDetail';
+import NotFoundChar from '../../components/NotFoundChar/NotFoundChar';
+import Flyout from '../../components/Flyout/Flyout';
 
 type PageProps = {
   characters: Character[];
@@ -58,18 +60,23 @@ function Page({ characters, totalPages, currentPage, searchQuery, selectedCharac
     <>
       <Header />
       <main className={'main'}>
-        <div className="cardList">
-          <div className="mainWrap">
-            {characters.map((character) => (
-              <Card
-                key={character.id}
-                character={character}
-                onClick={() => handleCardClick(character.id)}
-              />
-            ))}
+      {characters.length === 0 ? (
+          <NotFoundChar />
+        ) : (
+          <div className="cardList">
+            <div className="mainWrap">
+              {characters.map((character) => (
+                <Card
+                  key={character.id}
+                  character={character}
+                  onClick={() => handleCardClick(character.id)}
+                />
+              ))}
+            </div>
+            <Pagination totalPages={totalPages} currentPage={currentPage} searchQuery={searchQuery} />
+            <Flyout />
           </div>
-          <Pagination totalPages={totalPages} currentPage={currentPage} searchQuery={searchQuery} />
-        </div>
+        )}
         {selectedCharacter && <CardDetail character={selectedCharacter} />}
       </main>
     </>
