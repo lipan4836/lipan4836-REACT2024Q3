@@ -15,7 +15,6 @@
     "types": [
       "@testing-library/jest-dom",
       "node",
-      "jest-fetch-mock",
       "jest"
     ],
     /* Bundler mode */
