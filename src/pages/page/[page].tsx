@@ -50,6 +50,7 @@ function Page({ characters, totalPages, currentPage, searchQuery, selectedCharac
   const router = useRouter();
 
   const selectedItemsCount = useAppSelector((state) => state.selectedItems.selectedItems.length);
+  const darkTheme = useAppSelector((state) => state.theme.darkTheme);
 
   const handleCardClick = (characterId: number) => {
     console.log('click card');
@@ -62,7 +63,7 @@ function Page({ characters, totalPages, currentPage, searchQuery, selectedCharac
   return (
     <>
       <Header />
-      <main className={'main'}>
+      <main className={darkTheme ? 'main mainDark' : 'main'}>
         {characters.length === 0 ? (
           <NotFoundChar />
         ) : (

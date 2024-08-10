@@ -2,10 +2,13 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import searchLogo from '../../assets/svg/btn-search.svg';
+import ThemeBtn from '../ThemeBtn/ThemeBtn';
+import { useAppSelector } from '../../hooks/hooksRedux';
 
 function Header() {
   const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
+  const darkTheme = useAppSelector((state) => state.theme.darkTheme);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,9 +20,9 @@ function Header() {
   };
 
   return (
-    <header className={'header'}>
+    <header className={darkTheme ? 'headerDark' : 'header'}>
       <div className="headerCont">
-        <h1 className={'h1'}>naruto characters base</h1>
+        <h1 className={darkTheme ? 'h1Dark' : 'h1'}>naruto characters base</h1>
         <form className="searchBlock" onSubmit={handleSearch}>
           <input
             type="search"
@@ -36,6 +39,7 @@ function Header() {
               height={32}
             />
           </button>
+          <ThemeBtn />
         </form>
       </div>
     </header>
