@@ -35,20 +35,14 @@ function Flyout() {
   return (
     <>
       <div className="flyout">
-      <p className="flyout_text">
-        {selectedItems.length} {selectedItems.length === 1 ? 'item is' : 'items are'} selected
-      </p>
-        <button
-          className={'flyout_btn'}
-          onClick={handleUnselectAll}
-        >
+        <p className="flyout_text">
+          {selectedItems.length} {selectedItems.length === 1 ? 'item is' : 'items are'} selected
+        </p>
+        <button className={'flyout_btn'} onClick={handleUnselectAll}>
           Unselect all
         </button>
         <a href={url} download={`${selectedItems.length}_characters.csv`}>
-          <button
-            className={'flyout_btn'}
-            onClick={handleDownload}
-          >
+          <button className={'flyout_btn'} onClick={handleDownload}>
             Download
           </button>
         </a>

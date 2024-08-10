@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import CardDetail from '../../components/CardDetail/CardDetail';
 import NotFoundChar from '../../components/NotFoundChar/NotFoundChar';
 import Flyout from '../../components/Flyout/Flyout';
+import { useAppSelector } from '../../hooks/hooksRedux';
 
 type PageProps = {
   characters: Character[];
@@ -48,6 +49,8 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context)
 function Page({ characters, totalPages, currentPage, searchQuery, selectedCharacter }: PageProps) {
   const router = useRouter();
 
+  const selectedItemsCount = useAppSelector((state) => state.selectedItems.selectedItems.length);
+
   const handleCardClick = (characterId: number) => {
     console.log('click card');
     router.push({
@@ -60,7 +63,7 @@ function Page({ characters, totalPages, currentPage, searchQuery, selectedCharac
     <>
       <Header />
       <main className={'main'}>
-      {characters.length === 0 ? (
+        {characters.length === 0 ? (
           <NotFoundChar />
         ) : (
           <div className="cardList">
@@ -73,8 +76,12 @@ function Page({ characters, totalPages, currentPage, searchQuery, selectedCharac
                 />
               ))}
             </div>
-            <Pagination totalPages={totalPages} currentPage={currentPage} searchQuery={searchQuery} />
-            <Flyout />
+            <Pagination
+              totalPages={totalPages}
+              currentPage={currentPage}
+              searchQuery={searchQuery}
+            />
+            {selectedItemsCount > 0 && <Flyout />}
           </div>
         )}
         {selectedCharacter && <CardDetail character={selectedCharacter} />}
