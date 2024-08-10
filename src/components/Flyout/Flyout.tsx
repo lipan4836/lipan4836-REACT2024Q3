@@ -1,3 +1,4 @@
+import React from 'react';
 import { Character } from '../../types/characterResponse';
 import { useState } from 'react';
 import { useAppSelector, useAppDispatch } from '../../hooks/hooksRedux';

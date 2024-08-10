@@ -1,3 +1,4 @@
+import React from 'react';
 import Image from 'next/image';
 import { useAppDispatch, useAppSelector } from '../../hooks/hooksRedux';
 import { toggleTheme } from '../../store/slices/themeSlice';

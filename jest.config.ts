@@ -10,7 +10,11 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: ['<rootDir>/setup-tests.ts'],
   transform: {
     '^.+\\.(ts|tsx)$': 'ts-jest',
+    '^.+\\.(js|jsx)$': 'babel-jest',
   },
+  transformIgnorePatterns: [
+    '/node_modules/',
+  ],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   moduleNameMapper: {
     '\\.(gif|ttf|eot|svg|png|jpg|jpeg)$': '<rootDir>/src/test/__mocks__/fileMock.js',

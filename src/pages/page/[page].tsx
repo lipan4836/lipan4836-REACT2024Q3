@@ -1,5 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
+import React from 'react';
 import Header from '../../components/Header/Header';
 import { Character } from '../../types/characterResponse';
 import { GetServerSideProps } from 'next';

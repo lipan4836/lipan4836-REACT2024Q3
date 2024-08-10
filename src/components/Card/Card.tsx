@@ -1,3 +1,4 @@
+import React from 'react';
 import { useAppSelector } from '../../hooks/hooksRedux';
 import { Character } from '../../types/characterResponse';
 import NoPhoto from '../NoPhoto/NoPhoto';

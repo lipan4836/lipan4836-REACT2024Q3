@@ -2,14 +2,24 @@
   "compilerOptions": {
     "target": "ES2020",
     "useDefineForClassFields": true,
-    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "lib": [
+      "ES2020",
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
+    ],
     "module": "ESNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["@testing-library/jest-dom", "node", "jest-fetch-mock", "jest"],
+    "types": [
+      "@testing-library/jest-dom",
+      "node",
+      "jest-fetch-mock",
+      "jest"
+    ],
     /* Bundler mode */
-    "moduleResolution": "bundler",
+    "moduleResolution": "Node",
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -23,8 +33,18 @@
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "plugins": [{ "name": "next" }]
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
-  "include": ["./src", "./dist/types/**/*.ts", "./next-env.d.ts"],
-  "exclude": ["./node_modules"]
+  "include": [
+    "./src",
+    "./dist/types/**/*.ts",
+    "./next-env.d.ts"
+  ],
+  "exclude": [
+    "./node_modules"
+  ]
 }

@@ -1,3 +1,4 @@
+import React from 'react';
 import { ErrorInfo } from 'react';
 import Image from 'next/image';
 

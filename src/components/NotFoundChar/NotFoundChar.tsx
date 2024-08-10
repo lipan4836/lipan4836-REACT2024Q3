@@ -1,3 +1,5 @@
+import React from 'react';
+
 function NotFoundChar() {
   return (
     <div className="notFoundCharWrap">

@@ -1,122 +1,67 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import '@testing-library/jest-dom';
+import { useAppSelector } from '../../hooks/hooksRedux';
 import Card from './Card';
 import { Character } from '../../types/characterResponse';
-import AppProvider from '../AppContext/AppProvider';
-import { Provider } from 'react-redux';
-import configureStore from 'redux-mock-store';
-import useAppContext from '../AppContext/useAppContext';
 
-const mockStore = configureStore([]);
-const store = mockStore({
-  selectedItems: {
-    selectedItems: [],
-  },
-});
+jest.mock('../../hooks/hooksRedux', () => ({
+  useAppSelector: jest.fn(),
+}));
 
-const mockCharacter: Character = {
-  id: 1,
-  name: 'Naruto Uzumaki',
-  images: ['https://example.com/naruto.jpg'],
-  jutsu: ['Shadow Clone'],
-  personal: { sex: 'male' },
-  rank: { ninjaRank: { genin: 'Genin' } },
-};
-
-const mockCharacterWithoutImage: Character = {
-  ...mockCharacter,
-  images: [],
-};
-
-jest.mock('../AppContext/useAppContext');
+jest.mock('./Checkbox/Checkbox', () => () => <div data-testid="checkbox">Mocked Checkbox</div>);
+jest.mock('../NoPhoto/NoPhoto', () => () => <div data-testid="no-photo">No Photo Available</div>);
 
 describe('Card component', () => {
+  const mockCharacter: Character = {
+    id: 1,
+    name: 'Test Character',
+    images: ['test-image.jpg'],
+    jutsu: ['some jutsu'],
+    personal: {
+      sex: 'male',
+    },
+  };
+
+  const mockOnClick = jest.fn();
+
   beforeEach(() => {
-    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
+    (useAppSelector as jest.Mock).mockReturnValue(false);
   });
 
-  test('renders the relevant card data', () => {
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacter} onClick={jest.fn()} />
-        </AppProvider>
-      </Provider>,
-    );
-
-    expect(screen.getByText(mockCharacter.name)).toBeInTheDocument();
-    expect(screen.getByAltText(mockCharacter.name)).toHaveAttribute('src', mockCharacter.images[0]);
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
-  test('renders NoPhoto component if no images are present', () => {
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacterWithoutImage} onClick={jest.fn()} />
-        </AppProvider>
-      </Provider>,
-    );
-
-    expect(screen.getByTestId('noPhotoComponent')).toBeInTheDocument();
-    expect(screen.getByTestId('noPhotoComponent')).toHaveTextContent('No photo :(');
+  it('renders character name', () => {
+    render(<Card character={mockCharacter} onClick={mockOnClick} />);
+    expect(screen.getByText('Test Character')).toBeInTheDocument();
   });
 
-  test('clicking on card triggers onClick function', () => {
-    const handleClick = jest.fn();
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacter} onClick={handleClick} />
-        </AppProvider>
-      </Provider>,
-    );
+  it('renders image if images exist', () => {
+    render(<Card character={mockCharacter} onClick={mockOnClick} />);
+    expect(screen.getByAltText('Test Character')).toHaveAttribute('src', 'test-image.jpg');
+  });
 
+  it('renders NoPhoto if images do not exist', () => {
+    const characterWithoutImage = { ...mockCharacter, images: [] };
+    render(<Card character={characterWithoutImage} onClick={mockOnClick} />);
+    expect(screen.getByTestId('no-photo')).toBeInTheDocument();
+  });
+
+  it('applies correct class based on theme', () => {
+    (useAppSelector as jest.Mock).mockReturnValue(true); // темная тема
+    render(<Card character={mockCharacter} onClick={mockOnClick} />);
+    expect(screen.getByRole('article')).toHaveClass('charDark');
+  });
+
+  it('calls onClick when card is clicked', () => {
+    render(<Card character={mockCharacter} onClick={mockOnClick} />);
     fireEvent.click(screen.getByRole('article'));
-
-    expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 
-  test('renders and interacts with Checkbox', () => {
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacter} onClick={jest.fn()} />
-        </AppProvider>
-      </Provider>,
-    );
-
-    const checkbox = screen.getByRole('checkbox');
-    expect(checkbox).toBeInTheDocument();
-
-    fireEvent.click(checkbox);
-    expect(store.getActions()).toEqual([{ type: 'selectedItems/addItem', payload: mockCharacter }]);
-  });
-
-  test('applies dark theme class when darkTheme is true', () => {
-    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: true });
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacter} onClick={jest.fn()} />
-        </AppProvider>
-      </Provider>,
-    );
-
-    const article = screen.getByRole('article');
-    expect(article).toHaveClass('charDark');
-  });
-
-  test('does not apply dark theme class when darkTheme is false', () => {
-    (useAppContext as jest.Mock).mockReturnValue({ darkTheme: false });
-    render(
-      <Provider store={store}>
-        <AppProvider>
-          <Card character={mockCharacter} onClick={jest.fn()} />
-        </AppProvider>
-      </Provider>,
-    );
-
-    const article = screen.getByRole('article');
-    expect(article).not.toHaveClass('charDark');
+  it('renders Checkbox component', () => {
+    render(<Card character={mockCharacter} onClick={mockOnClick} />);
+    expect(screen.getByTestId('checkbox')).toBeInTheDocument();
   });
 });

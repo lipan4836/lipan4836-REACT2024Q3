@@ -1,3 +1,4 @@
+import React from 'react';
 import NoPhoto from '../NoPhoto/NoPhoto';
 import { useRouter } from 'next/router';
 import { Character } from '../../types/characterResponse';
