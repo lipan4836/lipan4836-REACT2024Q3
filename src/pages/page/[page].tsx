@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../components/Header/Header';
 import { Character } from '../../types/characterResponse';
 import { GetServerSideProps } from 'next';
@@ -11,6 +11,7 @@ import CardDetail from '../../components/CardDetail/CardDetail';
 import NotFoundChar from '../../components/NotFoundChar/NotFoundChar';
 import Flyout from '../../components/Flyout/Flyout';
 import { useAppSelector } from '../../hooks/hooksRedux';
+import Loader from '../../components/Loader/Loader';
 
 type PageProps = {
   characters: Character[];
@@ -48,18 +49,25 @@ export const getServerSideProps: GetServerSideProps<PageProps> = async (context)
 };
 
 function Page({ characters, totalPages, currentPage, searchQuery, selectedCharacter }: PageProps) {
+  const [loading, setLoading] = useState(true);
+
   const router = useRouter();
 
   const selectedItemsCount = useAppSelector((state) => state.selectedItems.selectedItems.length);
   const darkTheme = useAppSelector((state) => state.theme.darkTheme);
 
+  useEffect(() => {
+    setLoading(false);
+  }, []);
+
   const handleCardClick = (characterId: number) => {
-    console.log('click card');
     router.push({
       pathname: `/page/${currentPage}`,
       query: { searchQuery, detail: characterId },
     });
   };
+
+  if (loading) return <Loader />;
 
   return (
     <>
