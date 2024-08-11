@@ -15,11 +15,15 @@ const config: Config = {
   preset: 'ts-jest',
   collectCoverage: true,
   coverageDirectory: 'coverage',
+  coveragePathIgnorePatterns: [
+    '/node_modules/',
+    '/src/types/',
+  ],
   collectCoverageFrom: [
-    'src/**/*.{ts,tsx}', // Включаем все файлы .ts и .tsx из папки src
-    '!src/**/*.d.ts', // Исключаем файлы с типами
-    '!src/**/__tests__/**', // Исключаем тестовые файлы
-    '!src/**/?(*.)+(spec|test).[jt]s?(x)', // Исключаем файлы тестов с расширениями .spec и .test
+    'src/**/*.{ts,tsx}',
+    '!src/**/*.d.ts',
+    '!src/**/__tests__/**',
+    '!src/**/?(*.)+(spec|test).[jt]s?(x)',
   ],
 }
  
