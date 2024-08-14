@@ -1,5 +1,9 @@
 import { useRef, useState } from 'react';
 import '../../styles/Form.scss';
+import Checkbox from './Checkbox';
+import RadioGroup from './RadioGroup';
+import TextInput from './TextInput';
+import FileUpload from './FileUpload';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -16,6 +20,7 @@ function UnCtrlForm() {
 
   const handleFileChange = () => {
     const file = fileRef.current?.files?.[0];
+
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -30,24 +35,20 @@ function UnCtrlForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    let name: string = '',
-      age: string = '',
-      email: string = '',
-      pass1: string = '',
-      pass2: string = '',
-      agreement: boolean = false,
-      country: string = '';
-
-    if (nameRef.current) name = nameRef.current.value;
-    if (ageRef.current) age = ageRef.current.value;
-    if (emailRef.current) email = emailRef.current.value;
-    if (pass1Ref.current) pass1 = pass1Ref.current.value;
-    if (pass2Ref.current) pass2 = pass2Ref.current.value;
-    if (agreementRef.current) agreement = agreementRef.current.checked;
-    if (countryRef.current) country = countryRef.current.value;
+    const formValues = {
+      name: nameRef.current ? nameRef.current.value : '',
+      age: ageRef.current ? ageRef.current.value : '',
+      email: emailRef.current ? emailRef.current.value : '',
+      pass1: pass1Ref.current ? pass1Ref.current.value : '',
+      pass2: pass2Ref.current ? pass2Ref.current.value : '',
+      agreement: agreementRef.current ? agreementRef.current.checked : false,
+      country: countryRef.current ? countryRef.current.value : '',
+      gender,
+      imageBase64,
+    };
 
     console.log(
-      `submit value:\nname - ${name},\nage - ${age},\ne-mail - ${email},\npass1 - ${pass1},\npass2 - ${pass2},\ngender - ${gender},\nagreement - ${agreement},\ncountry - ${country},\nfile - ${imageBase64}`,
+      `submit value:\nname - ${formValues.name},\nage - ${formValues.age},\ne-mail - ${formValues.email},\npass1 - ${formValues.pass1},\npass2 - ${formValues.pass2},\ngender - ${formValues.gender},\nagreement - ${formValues.agreement},\ncountry - ${formValues.country},\nfile - ${formValues.imageBase64}`,
     );
   };
 
@@ -55,134 +56,66 @@ function UnCtrlForm() {
     <main className="main">
       <h2>Uncontrolled Form</h2>
       <form className="form" onSubmit={handleSubmit}>
-        {/* // name */}
-        <div className="form_line-wrap">
-          <label htmlFor="name" className="form_label">
-            Name
-          </label>
-          <input
-            type="text"
-            className="form_input"
-            id="name"
-            placeholder="enter your name"
-            ref={nameRef}
-            required
-          />
-        </div>
-        {/* age */}
-        <div className="form_line-wrap">
-          <label htmlFor="age" className="form_label">
-            Age
-          </label>
-          <input
-            type="text"
-            className="form_input"
-            id="age"
-            placeholder="enter your age"
-            ref={ageRef}
-            required
-          />
-        </div>
-        {/* email */}
-        <div className="form_line-wrap">
-          <label htmlFor="email" className="form_label">
-            e-mail
-          </label>
-          <input
-            type="email"
-            className="form_input"
-            id="email"
-            placeholder="enter your e-mail"
-            ref={emailRef}
-            required
-          />
-        </div>
-        {/* password 1 */}
-        <div className="form_line-wrap">
-          <label htmlFor="password1" className="form_label">
-            Password
-          </label>
-          <input
-            type="password"
-            className="form_input"
-            id="password1"
-            placeholder="enter your password"
-            ref={pass1Ref}
-            required
-          />
-        </div>
-        {/* password 2 */}
-        <div className="form_line-wrap">
-          <label htmlFor="password2" className="form_label">
-            Confirm Password
-          </label>
-          <input
-            type="password"
-            className="form_input"
-            id="password2"
-            placeholder="confirm password"
-            ref={pass2Ref}
-            required
-          />
-        </div>
-        {/* gender */}
-        <div className="form_line-wrap">
-          <span className="form_label">Gender</span>
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="male"
-              onChange={() => setGender('male')}
-              required
-            />
-            Male
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="gender"
-              value="female"
-              onChange={() => setGender('female')}
-              required
-            />
-            Female
-          </label>
-        </div>
-        {/* agreement */}
-        <div className="form_line-wrap">
-          <label className="form_label">I agree to the terms and conditions</label>
-          <input type="checkbox" className="form_checkbox" ref={agreementRef} required />
-        </div>
-        {/* upload image */}
-        <div className="form_line-wrap">
-          <label htmlFor="file" className="form_label">
-            Upload Image
-          </label>
-          <input
-            type="file"
-            className="form_input"
-            id="file"
-            ref={fileRef}
-            onChange={handleFileChange}
-            required
-          />
-        </div>
-        {/* country selector */}
-        <div className="form_line-wrap">
-          <label htmlFor="country" className="form_label">
-            Country
-          </label>
-          <input
-            type="text"
-            className="form_input"
-            id="country"
-            placeholder="enter your country"
-            ref={countryRef}
-            required
-          />
-        </div>
-        {/* submit button */}
+        <TextInput
+          label="Name"
+          id="name"
+          type="text"
+          placeholder="enter your name"
+          inputRef={nameRef}
+          required
+        />
+        <TextInput
+          label="Age"
+          id="age"
+          type="text"
+          placeholder="enter your age"
+          inputRef={ageRef}
+          required
+        />
+        <TextInput
+          label="e-mail"
+          id="email"
+          type="email"
+          placeholder="enter your e-mail"
+          inputRef={emailRef}
+          required
+        />
+        <TextInput
+          label="Password"
+          id="password1"
+          type="password"
+          placeholder="enter your password"
+          inputRef={pass1Ref}
+          required
+        />
+        <TextInput
+          label="Confirm Password"
+          id="password2"
+          type="password"
+          placeholder="confirm password"
+          inputRef={pass2Ref}
+          required
+        />
+        <RadioGroup
+          label="Gender"
+          name="gender"
+          options={[
+            { value: 'male', label: 'Male' },
+            { value: 'female', label: 'Female' },
+          ]}
+          selectedValue={gender}
+          onChange={setGender}
+        />
+        <Checkbox label="I agree to the terms and conditions" inputRef={agreementRef} required />
+        <FileUpload label="Upload Image" inputRef={fileRef} onChange={handleFileChange} required />
+        <TextInput
+          label="Country"
+          id="country"
+          type="text"
+          placeholder="enter your country"
+          inputRef={countryRef}
+          required
+        />
         <button className="form_submit" type="submit">
           Submit
         </button>
