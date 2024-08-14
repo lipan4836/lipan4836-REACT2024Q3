@@ -11,6 +11,7 @@ import formValidationSchema from '../../utils/formValidation';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 import CountryInput from './CountryInput';
+import { useNavigate } from 'react-router-dom';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -31,6 +32,7 @@ function UnCtrlForm() {
   const countries = useSelector((state: RootState) => state.countries.list);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const checkFormCompleteness = useCallback(() => {
     const isComplete =
@@ -115,6 +117,7 @@ function UnCtrlForm() {
       setErrors({});
       console.log('Validated form values:', formValues);
       dispatch(setFormData(formValues));
+      navigate('/');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const validationError: Record<string, string> = {};

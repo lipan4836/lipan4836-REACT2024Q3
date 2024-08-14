@@ -1,16 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { FormValuesProps } from '../../types/formValuesProps';
 
-const initialState: FormValuesProps = {
-  name: '',
-  age: '',
-  email: '',
-  pass1: '',
-  pass2: '',
-  gender: null,
-  agreement: false,
-  country: '',
-  imageBase64: null,
+interface FormState {
+  currentData: FormValuesProps;
+  previousData: FormValuesProps | null;
+}
+
+const initialState: FormState = {
+  currentData: {
+    name: '',
+    age: '',
+    email: '',
+    pass1: '',
+    pass2: '',
+    gender: null,
+    agreement: false,
+    country: '',
+    imageBase64: null,
+  },
+  previousData: null,
 };
 
 const formSlice = createSlice({
@@ -18,7 +26,8 @@ const formSlice = createSlice({
   initialState,
   reducers: {
     setFormData(state, action: PayloadAction<FormValuesProps>) {
-      return { ...state, ...action.payload };
+      state.previousData = { ...state.currentData };
+      state.currentData = { ...action.payload };
     },
   },
 });
