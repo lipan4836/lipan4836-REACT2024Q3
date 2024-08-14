@@ -3,14 +3,13 @@ import '../../styles/Form.scss';
 interface CheckboxProps {
   label: string;
   inputRef: React.RefObject<HTMLInputElement>;
-  required?: boolean;
 }
 
-function Checkbox({ label, inputRef, required }: CheckboxProps) {
+function Checkbox({ label, inputRef }: CheckboxProps) {
   return (
     <div className="form_line-wrap">
       <label className="form_label">{label}</label>
-      <input type="checkbox" className="form_checkbox" ref={inputRef} required={required} />
+      <input type="checkbox" className="form_checkbox" ref={inputRef} />
     </div>
   );
 }

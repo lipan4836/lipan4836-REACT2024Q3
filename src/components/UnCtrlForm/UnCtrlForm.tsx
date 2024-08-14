@@ -7,6 +7,8 @@ import FileUpload from './FileUpload';
 import { FormValuesProps } from '../../types/formValuesProps';
 import { useDispatch } from 'react-redux';
 import { setFormData } from '../../store/slices/formSlice';
+import formValidationSchema from '../../utils/formValidation';
+import * as Yup from 'yup';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -20,6 +22,7 @@ function UnCtrlForm() {
 
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [gender, setGender] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   const dispatch = useDispatch();
 
@@ -37,7 +40,7 @@ function UnCtrlForm() {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     const formValues: FormValuesProps = {
@@ -52,73 +55,108 @@ function UnCtrlForm() {
       imageBase64,
     };
 
-    dispatch(setFormData(formValues));
+    try {
+      await formValidationSchema.validate(formValues, { abortEarly: false });
+      setErrors({});
+      console.log('Validated form values:', formValues);
+      dispatch(setFormData(formValues));
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const validationError: Record<string, string> = {};
+        err.inner.forEach((error) => {
+          if (error.path) validationError[error.path] = error.message;
+        });
+        setErrors(validationError);
+      }
+    }
   };
 
   return (
     <main className="main">
       <h2>Uncontrolled Form</h2>
-      <form className="form" onSubmit={handleSubmit}>
-        <TextInput
-          label="Name"
-          id="name"
-          type="text"
-          placeholder="enter your name"
-          inputRef={nameRef}
-          required
-        />
-        <TextInput
-          label="Age"
-          id="age"
-          type="text"
-          placeholder="enter your age"
-          inputRef={ageRef}
-          required
-        />
-        <TextInput
-          label="e-mail"
-          id="email"
-          type="email"
-          placeholder="enter your e-mail"
-          inputRef={emailRef}
-          required
-        />
-        <TextInput
-          label="Password"
-          id="password1"
-          type="password"
-          placeholder="enter your password"
-          inputRef={pass1Ref}
-          required
-        />
-        <TextInput
-          label="Confirm Password"
-          id="password2"
-          type="password"
-          placeholder="confirm password"
-          inputRef={pass2Ref}
-          required
-        />
-        <RadioGroup
-          label="Gender"
-          name="gender"
-          options={[
-            { value: 'male', label: 'Male' },
-            { value: 'female', label: 'Female' },
-          ]}
-          selectedValue={gender}
-          onChange={setGender}
-        />
-        <Checkbox label="I agree to the terms and conditions" inputRef={agreementRef} required />
-        <FileUpload label="Upload Image" inputRef={fileRef} onChange={handleFileChange} required />
-        <TextInput
-          label="Country"
-          id="country"
-          type="text"
-          placeholder="enter your country"
-          inputRef={countryRef}
-          required
-        />
+      <form className="form" onSubmit={handleSubmit} noValidate>
+        <div className="form_line">
+          <TextInput
+            label="Name"
+            id="name"
+            type="text"
+            placeholder="enter your name"
+            inputRef={nameRef}
+          />
+          {errors.name && <div className="form_error">{errors.name}</div>}
+        </div>
+        <div className="form_line">
+          <TextInput
+            label="Age"
+            id="age"
+            type="text"
+            placeholder="enter your age"
+            inputRef={ageRef}
+          />
+          {errors.age && <div className="form_error">{errors.age}</div>}
+        </div>
+        <div className="form_line">
+          <TextInput
+            label="e-mail"
+            id="email"
+            type="email"
+            placeholder="enter your e-mail"
+            inputRef={emailRef}
+          />
+          {errors.email && <div className="form_error">{errors.email}</div>}
+        </div>
+        <div className="form_line">
+          <TextInput
+            label="Password"
+            id="password1"
+            type="password"
+            placeholder="enter your password"
+            inputRef={pass1Ref}
+          />
+          {errors.pass1 && <div className="form_error">{errors.pass1}</div>}
+        </div>
+        <div className="form_line">
+          <TextInput
+            label="Confirm Password"
+            id="password2"
+            type="password"
+            placeholder="confirm password"
+            inputRef={pass2Ref}
+          />
+          {errors.pass2 && <div className="form_error">{errors.pass2}</div>}
+        </div>
+        <div className="form_line">
+          <RadioGroup
+            label="Gender"
+            name="gender"
+            options={[
+              { value: 'male', label: 'Male' },
+              { value: 'female', label: 'Female' },
+            ]}
+            selectedValue={gender}
+            onChange={setGender}
+          />
+          {errors.gender && <div className="form_error">{errors.gender}</div>}
+        </div>
+        <div className="form_line">
+          <Checkbox label="I agree to the terms and conditions" inputRef={agreementRef} />
+          {errors.agreement && <div className="form_error">{errors.agreement}</div>}
+        </div>
+        <div className="form_line">
+          <FileUpload label="Upload Image" inputRef={fileRef} onChange={handleFileChange} />
+          {errors.imageBase64 && <div className="form_error">{errors.imageBase64}</div>}
+        </div>
+        <div className="form_line">
+          <TextInput
+            label="Country"
+            id="country"
+            type="text"
+            placeholder="enter your country"
+            inputRef={countryRef}
+          />
+          {errors.country && <div className="form_error">{errors.country}</div>}
+        </div>
+
         <button className="form_submit" type="submit">
           Submit
         </button>
