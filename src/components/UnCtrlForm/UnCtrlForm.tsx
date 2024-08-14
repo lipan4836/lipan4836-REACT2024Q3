@@ -4,6 +4,9 @@ import Checkbox from './Checkbox';
 import RadioGroup from './RadioGroup';
 import TextInput from './TextInput';
 import FileUpload from './FileUpload';
+import { FormValuesProps } from '../../types/formValuesProps';
+import { useDispatch } from 'react-redux';
+import { setFormData } from '../../store/slices/formSlice';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -17,6 +20,8 @@ function UnCtrlForm() {
 
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [gender, setGender] = useState<string | null>(null);
+
+  const dispatch = useDispatch();
 
   const handleFileChange = () => {
     const file = fileRef.current?.files?.[0];
@@ -35,7 +40,7 @@ function UnCtrlForm() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const formValues = {
+    const formValues: FormValuesProps = {
       name: nameRef.current ? nameRef.current.value : '',
       age: ageRef.current ? ageRef.current.value : '',
       email: emailRef.current ? emailRef.current.value : '',
@@ -47,9 +52,7 @@ function UnCtrlForm() {
       imageBase64,
     };
 
-    console.log(
-      `submit value:\nname - ${formValues.name},\nage - ${formValues.age},\ne-mail - ${formValues.email},\npass1 - ${formValues.pass1},\npass2 - ${formValues.pass2},\ngender - ${formValues.gender},\nagreement - ${formValues.agreement},\ncountry - ${formValues.country},\nfile - ${formValues.imageBase64}`,
-    );
+    dispatch(setFormData(formValues));
   };
 
   return (
