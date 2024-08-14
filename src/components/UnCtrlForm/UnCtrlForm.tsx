@@ -5,10 +5,12 @@ import RadioGroup from './RadioGroup';
 import TextInput from './TextInput';
 import FileUpload from './FileUpload';
 import { FormValuesProps } from '../../types/formValuesProps';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setFormData } from '../../store/slices/formSlice';
 import formValidationSchema from '../../utils/formValidation';
 import * as Yup from 'yup';
+import { RootState } from '../../store/store';
+import CountryInput from './CountryInput';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -24,6 +26,9 @@ function UnCtrlForm() {
   const [gender, setGender] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
+
+  const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
+  const countries = useSelector((state: RootState) => state.countries.list);
 
   const dispatch = useDispatch();
 
@@ -70,6 +75,23 @@ function UnCtrlForm() {
   };
 
   const handleInputChange = () => {
+    checkFormCompleteness();
+  };
+
+  const handleCountryInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const input = e.target.value;
+    const filtered = countries.filter((country) =>
+      country.toLowerCase().includes(input.toLowerCase()),
+    );
+    setFilteredCountries(filtered);
+    handleInputChange();
+  };
+
+  const handleCountrySelect = (country: string) => {
+    if (countryRef.current) {
+      countryRef.current.value = country;
+    }
+    setFilteredCountries([]);
     checkFormCompleteness();
   };
 
@@ -192,15 +214,28 @@ function UnCtrlForm() {
           {errors.imageBase64 && <div className="form_error">{errors.imageBase64}</div>}
         </div>
         <div className="form_line">
-          <TextInput
+          <CountryInput
             label="Country"
             id="country"
             type="text"
             placeholder="enter your country"
             inputRef={countryRef}
-            onInput={handleInputChange}
+            onInput={handleCountryInputChange}
           />
           {errors.country && <div className="form_error">{errors.country}</div>}
+          {filteredCountries.length > 0 && (
+            <ul className="autocomplete_list">
+              {filteredCountries.map((country) => (
+                <li
+                  key={country}
+                  onClick={() => handleCountrySelect(country)}
+                  className="autocomplete_item"
+                >
+                  {country}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <button className="form_submit" type="submit" disabled={!isFormComplete}>
