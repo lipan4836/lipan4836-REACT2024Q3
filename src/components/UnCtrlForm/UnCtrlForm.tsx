@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect, useCallback } from 'react';
 import '../../styles/Form.scss';
 import Checkbox from './Checkbox';
 import RadioGroup from './RadioGroup';
@@ -23,8 +23,38 @@ function UnCtrlForm() {
   const [imageBase64, setImageBase64] = useState<string | null>(null);
   const [gender, setGender] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 
   const dispatch = useDispatch();
+
+  const checkFormCompleteness = useCallback(() => {
+    const isComplete =
+      nameRef.current?.value &&
+      ageRef.current?.value &&
+      emailRef.current?.value &&
+      pass1Ref.current?.value &&
+      pass2Ref.current?.value &&
+      agreementRef.current?.checked &&
+      gender &&
+      imageBase64 &&
+      countryRef.current?.value;
+
+    setIsFormComplete(!!isComplete);
+  }, [
+    nameRef,
+    ageRef,
+    emailRef,
+    pass1Ref,
+    pass2Ref,
+    agreementRef,
+    gender,
+    imageBase64,
+    countryRef,
+  ]);
+
+  useEffect(() => {
+    checkFormCompleteness();
+  }, [imageBase64, gender, checkFormCompleteness]);
 
   const handleFileChange = () => {
     const file = fileRef.current?.files?.[0];
@@ -34,10 +64,13 @@ function UnCtrlForm() {
       reader.onloadend = () => {
         const base64String = reader.result as string;
         setImageBase64(base64String);
-        console.log(`Uploaded Image in Base64: ${base64String}`);
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleInputChange = () => {
+    checkFormCompleteness();
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -82,6 +115,7 @@ function UnCtrlForm() {
             type="text"
             placeholder="enter your name"
             inputRef={nameRef}
+            onInput={handleInputChange}
           />
           {errors.name && <div className="form_error">{errors.name}</div>}
         </div>
@@ -92,6 +126,7 @@ function UnCtrlForm() {
             type="text"
             placeholder="enter your age"
             inputRef={ageRef}
+            onInput={handleInputChange}
           />
           {errors.age && <div className="form_error">{errors.age}</div>}
         </div>
@@ -102,6 +137,7 @@ function UnCtrlForm() {
             type="email"
             placeholder="enter your e-mail"
             inputRef={emailRef}
+            onInput={handleInputChange}
           />
           {errors.email && <div className="form_error">{errors.email}</div>}
         </div>
@@ -112,6 +148,7 @@ function UnCtrlForm() {
             type="password"
             placeholder="enter your password"
             inputRef={pass1Ref}
+            onInput={handleInputChange}
           />
           {errors.pass1 && <div className="form_error">{errors.pass1}</div>}
         </div>
@@ -122,6 +159,7 @@ function UnCtrlForm() {
             type="password"
             placeholder="confirm password"
             inputRef={pass2Ref}
+            onInput={handleInputChange}
           />
           {errors.pass2 && <div className="form_error">{errors.pass2}</div>}
         </div>
@@ -134,12 +172,19 @@ function UnCtrlForm() {
               { value: 'female', label: 'Female' },
             ]}
             selectedValue={gender}
-            onChange={setGender}
+            onChange={(value) => {
+              setGender(value);
+              checkFormCompleteness();
+            }}
           />
           {errors.gender && <div className="form_error">{errors.gender}</div>}
         </div>
         <div className="form_line">
-          <Checkbox label="I agree to the terms and conditions" inputRef={agreementRef} />
+          <Checkbox
+            label="I agree to the terms and conditions"
+            inputRef={agreementRef}
+            onInput={handleInputChange}
+          />
           {errors.agreement && <div className="form_error">{errors.agreement}</div>}
         </div>
         <div className="form_line">
@@ -153,11 +198,12 @@ function UnCtrlForm() {
             type="text"
             placeholder="enter your country"
             inputRef={countryRef}
+            onInput={handleInputChange}
           />
           {errors.country && <div className="form_error">{errors.country}</div>}
         </div>
 
-        <button className="form_submit" type="submit">
+        <button className="form_submit" type="submit" disabled={!isFormComplete}>
           Submit
         </button>
       </form>
