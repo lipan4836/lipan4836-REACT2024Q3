@@ -6,7 +6,7 @@ import TextInput from './TextInput';
 import FileUpload from './FileUpload';
 import { FormValuesProps } from '../../types/formValuesProps';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFormData } from '../../store/slices/formSlice';
+import { addFormData } from '../../store/slices/formSlice';
 import formValidationSchema from '../../utils/formValidation';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
@@ -116,7 +116,7 @@ function UnCtrlForm() {
       await formValidationSchema.validate(formValues, { abortEarly: false });
       setErrors({});
       console.log('Validated form values:', formValues);
-      dispatch(setFormData(formValues));
+      dispatch(addFormData(formValues));
       navigate('/');
     } catch (err) {
       if (err instanceof Yup.ValidationError) {

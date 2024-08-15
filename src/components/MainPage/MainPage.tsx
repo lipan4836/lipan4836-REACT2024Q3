@@ -2,78 +2,61 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../store/store';
 import { useState, useEffect } from 'react';
+import './MainPage.scss';
 
 function MainPage() {
-  const currentData = useSelector((state: RootState) => state.form.currentData);
-  const previousData = useSelector((state: RootState) => state.form.previousData);
-  const [highlightedFields, setHighlightedFields] = useState<string[]>([]);
+  const submissions = useSelector((state: RootState) => state.form.submissions);
+  const lastAddedTimestamp = useSelector((state: RootState) => state.form.lastAddedTimestamp);
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 
   useEffect(() => {
-    if (currentData && previousData) {
-      const changedFields = Object.keys(currentData).filter((key) => {
-        return (
-          currentData[key as keyof typeof currentData] !==
-          previousData[key as keyof typeof previousData]
-        );
-      });
-
-      setHighlightedFields(changedFields);
+    if (lastAddedTimestamp) {
+      setHighlightedIndex(submissions.length - 1); // Highlight the last submission
 
       const timeout = setTimeout(() => {
-        setHighlightedFields([]);
-      }, 3000); // Подсветка на 3 секунды
+        setHighlightedIndex(null);
+      }, 3000);
 
       return () => clearTimeout(timeout);
     }
-  }, [currentData, previousData]);
-
-  const isCurrentDataEmpty = Object.values(currentData).every(
-    (value) => value === '' || value === null || value === false,
-  );
+  }, [lastAddedTimestamp, submissions.length]);
 
   return (
     <main className="main">
-      <h2 className="head-h2">Main page</h2>
+      <h2 className="h2">Main page</h2>
       <Link to={'/unctrl'}>Uncontrolled Form</Link>
       <Link to={'/ctrl'}>React Hook Form</Link>
 
-      {!isCurrentDataEmpty && (
+      {submissions.length > 0 && (
         <div className="form-data">
-          <h3>Submitted Data</h3>
+          <h3 className="h3">Submitted Data</h3>
           <ul className="list">
-            {Object.entries(currentData).map(([key, value]) =>
-              key !== 'imageBase64' ? (
-                <li
-                  key={key}
-                  className={
-                    highlightedFields.includes(key) ? 'highlight saved-data' : 'saved-data'
-                  }
-                >
-                  <div className="data-wrap">
-                    <span className="data_key">{key[0].toUpperCase().concat(key.slice(1))}</span>
-                    <span className="data_value">{value?.toString()}</span>
-                  </div>
-                </li>
-              ) : (
-                currentData.imageBase64 && (
-                  <li
-                    key={key}
-                    className={
-                      highlightedFields.includes(key)
-                        ? 'highlight saved-data image-cont'
-                        : 'saved-data image-cont'
-                    }
-                  >
-                    <span className="data_key">Uploaded Image</span>
-                    <img
-                      src={currentData.imageBase64}
-                      alt="Uploaded Preview"
-                      style={{ maxWidth: '35%' }}
-                    />
-                  </li>
-                )
-              ),
-            )}
+            {submissions.map((submit, index) => (
+              <li
+                key={index}
+                className={`saved-data ${highlightedIndex === index ? 'highlight' : ''}`}
+              >
+                {Object.entries(submit).map(([key, value]) =>
+                  key !== 'imageBase64' ? (
+                    <div key={key} className="data-wrap">
+                      <span className="data_key">{key[0].toUpperCase().concat(key.slice(1))}</span>
+                      <span className="data_value">{value?.toString()}</span>
+                    </div>
+                  ) : (
+                    submit.imageBase64 && (
+                      <div key={key} className="data-wrap image-cont">
+                        <span className="data_key">Uploaded Image</span>
+                        <img
+                          src={submit.imageBase64}
+                          alt="Uploaded Preview"
+                          style={{ maxWidth: '35%' }}
+                        />
+                      </div>
+                    )
+                  ),
+                )}
+              </li>
+            ))}
           </ul>
         </div>
       )}
