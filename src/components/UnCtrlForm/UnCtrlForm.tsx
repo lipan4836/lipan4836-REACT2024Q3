@@ -60,6 +60,51 @@ function UnCtrlForm() {
     countryRef,
   ]);
 
+  const [password, setPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [progressWidth, setProgressWidth] = useState(0);
+
+  const atLeastOneUppercase = /[A-Z]/;
+  const atLeastOneLowercase = /[a-z]/;
+  const atLeastOneNumeric = /[0-9]/;
+  const atLeastOneSpecialChar = /[#?!@$%^&*-]/;
+  const eightCharsOrMore = /.{8,}/;
+
+  function calculatePasswordStrength(password: string) {
+    let score = 0;
+    if (atLeastOneUppercase.test(password)) score += 1;
+    if (atLeastOneLowercase.test(password)) score += 1;
+    if (atLeastOneNumeric.test(password)) score += 1;
+    if (atLeastOneSpecialChar.test(password)) score += 1;
+    if (eightCharsOrMore.test(password)) score += 1;
+
+    const strengthPercentage = (score / 5) * 100;
+    setProgressWidth(strengthPercentage);
+
+    switch (score) {
+      case 0:
+      case 1:
+        return 'Very Weak';
+      case 2:
+        return 'Weak';
+      case 3:
+        return 'Medium';
+      case 4:
+        return 'Strong';
+      case 5:
+        return 'Very Strong';
+      default:
+        return '';
+    }
+  }
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const enteredPassword = event.target.value;
+    setPassword(enteredPassword);
+    const strength = calculatePasswordStrength(enteredPassword);
+    setPasswordStrength(strength);
+  };
+
   useEffect(() => {
     checkFormCompleteness();
   }, [imageBase64, gender, checkFormCompleteness]);
@@ -168,14 +213,29 @@ function UnCtrlForm() {
           {errors.email && <div className="form_error">{errors.email}</div>}
         </div>
         <div className="form_line">
-          <TextInput
-            label="Password"
-            id="password1"
-            type="password"
-            placeholder="enter your password"
-            inputRef={pass1Ref}
-            onInput={handleInputChange}
-          />
+          <div className="form_line-wrap">
+            <label htmlFor="password1" className="form_label">
+              Password
+            </label>
+            <input
+              type="password"
+              className="form_input"
+              id="password1"
+              placeholder="enter your password"
+              ref={pass1Ref}
+              onInput={handleInputChange}
+              onChange={handlePasswordChange}
+              value={password}
+            />
+            <div className="password-wrap">
+              {password && (
+                <div className="password-strength">
+                  <div className="password-strength_text">Strength: {passwordStrength}</div>
+                  <div className="password-strength_bar" style={{ width: `${progressWidth}%` }} />
+                </div>
+              )}
+            </div>
+          </div>
           {errors.pass1 && <div className="form_error">{errors.pass1}</div>}
         </div>
         <div className="form_line">

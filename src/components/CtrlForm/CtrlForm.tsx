@@ -64,6 +64,51 @@ export function CtrlForm() {
     setFilteredCountries([]);
   };
 
+  const [password, setPassword] = useState('');
+  const [passwordStrength, setPasswordStrength] = useState('');
+  const [progressWidth, setProgressWidth] = useState(0);
+
+  const atLeastOneUppercase = /[A-Z]/;
+  const atLeastOneLowercase = /[a-z]/;
+  const atLeastOneNumeric = /[0-9]/;
+  const atLeastOneSpecialChar = /[#?!@$%^&*-]/;
+  const eightCharsOrMore = /.{8,}/;
+
+  function calculatePasswordStrength(password: string) {
+    let score = 0;
+    if (atLeastOneUppercase.test(password)) score += 1;
+    if (atLeastOneLowercase.test(password)) score += 1;
+    if (atLeastOneNumeric.test(password)) score += 1;
+    if (atLeastOneSpecialChar.test(password)) score += 1;
+    if (eightCharsOrMore.test(password)) score += 1;
+
+    const strengthPercentage = (score / 5) * 100;
+    setProgressWidth(strengthPercentage);
+
+    switch (score) {
+      case 0:
+      case 1:
+        return 'Very Weak';
+      case 2:
+        return 'Weak';
+      case 3:
+        return 'Medium';
+      case 4:
+        return 'Strong';
+      case 5:
+        return 'Very Strong';
+      default:
+        return '';
+    }
+  }
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const enteredPassword = event.target.value;
+    setPassword(enteredPassword);
+    const strength = calculatePasswordStrength(enteredPassword);
+    setPasswordStrength(strength);
+  };
+
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -145,7 +190,17 @@ export function CtrlForm() {
               {...register('pass1')}
               placeholder="enter your password"
               type="password"
+              value={password}
+              onChange={handlePasswordChange}
             />
+            <div className="password-wrap">
+              {password && (
+                <div className="password-strength">
+                  <div className="password-strength_text">Strength: {passwordStrength}</div>
+                  <div className="password-strength_bar" style={{ width: `${progressWidth}%` }} />
+                </div>
+              )}
+            </div>
           </label>
           {errors.pass1 && (
             <p className="hook-form_error" role="alert">
