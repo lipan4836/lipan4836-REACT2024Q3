@@ -3,9 +3,12 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { FormValuesProps } from '../../types/formValuesProps';
 import '../../styles/Form.scss';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addFormData } from '../../store/slices/formSlice';
 import formValidationSchema from '../../utils/formValidation';
+import GoBackBtn from '../GoBackBtn/GoBackBtn';
+import { RootState } from '../../store/store';
+import { useState } from 'react';
 
 const schema = formValidationSchema;
 
@@ -38,6 +41,28 @@ export function CtrlForm() {
 
   const allFields = watch();
   const isFormFilled = Object.values(allFields).every((value) => value !== '' && value !== false);
+
+  const countries = useSelector((state: RootState) => state.countries.list);
+  const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
+  const [countryInput, setCountryInput] = useState<string>('');
+
+  const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    setCountryInput(inputValue);
+
+    const filtered = countries.filter((country) =>
+      country.toLowerCase().includes(inputValue.toLowerCase()),
+    );
+    setFilteredCountries(filtered);
+
+    setValue('country', inputValue);
+  };
+
+  const handleCountrySelect = (country: string) => {
+    setValue('country', country);
+    setCountryInput(country);
+    setFilteredCountries([]);
+  };
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -200,6 +225,8 @@ export function CtrlForm() {
             <input
               className="hook-form_line__input"
               {...register('country')}
+              value={countryInput}
+              onChange={handleCountryChange}
               placeholder="enter your country"
               type="text"
             />
@@ -209,12 +236,27 @@ export function CtrlForm() {
               {errors.country.message}
             </p>
           )}
+          {filteredCountries.length > 0 && (
+            <ul className="autocomplete_list">
+              {filteredCountries.map((country) => (
+                <li
+                  key={country}
+                  onClick={() => handleCountrySelect(country)}
+                  className="autocomplete_item"
+                >
+                  {country}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <button type="submit" disabled={!isFormFilled || isSubmitting}>
           Submit
         </button>
       </form>
+
+      <GoBackBtn />
     </main>
   );
 }

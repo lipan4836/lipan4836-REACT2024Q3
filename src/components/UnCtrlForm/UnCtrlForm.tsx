@@ -12,6 +12,7 @@ import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 import CountryInput from '../inputs/CountryInput';
 import { useNavigate } from 'react-router-dom';
+import GoBackBtn from '../GoBackBtn/GoBackBtn';
 
 function UnCtrlForm() {
   const nameRef = useRef<HTMLInputElement>(null);
@@ -246,12 +247,7 @@ function UnCtrlForm() {
         </button>
       </form>
 
-      {imageBase64 && (
-        <div>
-          <h3>Preview of Uploaded Image</h3>
-          <img src={imageBase64} alt="Uploaded Preview" style={{ maxWidth: '30%' }} />
-        </div>
-      )}
+      <GoBackBtn />
     </main>
   );
 }
