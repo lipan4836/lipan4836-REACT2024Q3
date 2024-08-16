@@ -1,8 +1,14 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { FormValuesProps } from '../../types/formValuesProps';
 import '../../styles/Form.scss';
+import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addFormData } from '../../store/slices/formSlice';
 
 export function CtrlForm() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -34,14 +40,17 @@ export function CtrlForm() {
     }
   };
 
-  const onSubmit: SubmitHandler<FormValuesProps> = (data) => alert(JSON.stringify(data));
+  const onSubmit: SubmitHandler<FormValuesProps> = (data) => {
+    dispatch(addFormData(data));
+    navigate('/');
+  };
 
   return (
     <main className="main">
-      <h2>Uncontrolled Form</h2>
+      <h2>Hook Form</h2>
 
       <form className="hook-form" onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Name</span>
             <input
@@ -54,7 +63,7 @@ export function CtrlForm() {
           {errors.name && <p role="alert">{errors.name.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Age</span>
             <input
@@ -67,7 +76,7 @@ export function CtrlForm() {
           {errors.age && <p role="alert">{errors.age.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">E-mail</span>
             <input
@@ -80,7 +89,7 @@ export function CtrlForm() {
           {errors.email && <p role="alert">{errors.email.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Password</span>
             <input
@@ -93,7 +102,7 @@ export function CtrlForm() {
           {errors.pass1 && <p role="alert">{errors.pass1.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Confirm Password</span>
             <input
@@ -113,7 +122,6 @@ export function CtrlForm() {
             { label: 'Female', value: 'Female' },
           ].map(({ label, value }, index) => (
             <label className="hook-form_line-gender__inputs" key={value + index}>
-              <span className="hook-form_line-gender__inputs__label">{label}</span>
               <input
                 className="hook-form_line-gender__inputs__input"
                 {...register('gender')}
@@ -121,12 +129,21 @@ export function CtrlForm() {
                 value={value}
                 type="radio"
               />
+              <span className="hook-form_line-gender__inputs__label">{label}</span>
             </label>
           ))}
           {errors.gender && <p role="alert">{errors.gender.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
+          <label className="hook-form_line">
+            <span className="hook-form_line__label">I agree to the terms and conditions</span>
+            <input className="hook-form_line__input" type="checkbox" {...register('agreement')} />
+          </label>
+          {errors.agreement && <p role="alert">{errors.agreement.message}</p>}
+        </div>
+
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Upload Image</span>
             <input className="hook-form_line__input" type="file" onChange={handleFileChange} />
@@ -134,7 +151,7 @@ export function CtrlForm() {
           {errors.imageBase64 && <p role="alert">{errors.imageBase64.message}</p>}
         </div>
 
-        <div>
+        <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Country</span>
             <input

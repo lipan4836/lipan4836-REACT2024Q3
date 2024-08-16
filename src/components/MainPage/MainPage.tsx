@@ -11,7 +11,7 @@ function MainPage() {
 
   useEffect(() => {
     if (lastAddedTimestamp) {
-      setHighlightedIndex(submissions.length - 1); // Highlight the last submission
+      setHighlightedIndex(submissions.length - 1);
 
       const timeout = setTimeout(() => {
         setHighlightedIndex(null);

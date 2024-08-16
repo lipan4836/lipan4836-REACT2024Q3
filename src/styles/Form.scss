@@ -45,6 +45,50 @@
   }
 }
 
+.hook-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 26px;
+  max-width: 768px;
+  min-width: 450px;
+
+  .hook-form_wrap {
+    width: 100%;
+  }
+
+  .hook-form_line {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    &__label {
+      font-weight: 500;
+    }
+
+    &__input {
+      line-height: 1.15;
+      font-family: inherit;
+      font-size: 100%;
+      padding: 6px;
+    }
+  }
+
+  .hook-form_line-gender {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .hook-form_line-gender__inputs {
+      display: flex;
+      gap: 8px;
+    }
+  }
+}
+
 .autocomplete_list {
   width: 205px;
   list-style: none;
