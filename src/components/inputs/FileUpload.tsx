@@ -12,7 +12,14 @@ function FileUpload({ label, inputRef, onChange }: FileInputProps) {
       <label htmlFor="file" className="form_label">
         {label}
       </label>
-      <input type="file" className="form_input" id="file" ref={inputRef} onChange={onChange} />
+      <input
+        type="file"
+        accept=".jpg,.jpeg,.png"
+        className="form_input"
+        id="file"
+        ref={inputRef}
+        onChange={onChange}
+      />
     </div>
   );
 }

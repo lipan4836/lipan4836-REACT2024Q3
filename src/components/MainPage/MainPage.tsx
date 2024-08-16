@@ -24,8 +24,15 @@ function MainPage() {
   return (
     <main className="main">
       <h2 className="h2">Main page</h2>
-      <Link to={'/unctrl'}>Uncontrolled Form</Link>
-      <Link to={'/ctrl'}>React Hook Form</Link>
+
+      <div className="link-wrap">
+        <Link className="link-left" to={'/unctrl'}>
+          Uncontrolled Form
+        </Link>
+        <Link className="link-right" to={'/ctrl'}>
+          React Hook Form
+        </Link>
+      </div>
 
       {submissions.length > 0 && (
         <div className="form-data">

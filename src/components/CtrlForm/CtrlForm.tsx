@@ -265,7 +265,12 @@ export function CtrlForm() {
         <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Upload Image</span>
-            <input className="hook-form_line__input" type="file" onChange={handleFileChange} />
+            <input
+              className="hook-form_line__input"
+              type="file"
+              accept=".jpg,.jpeg,.png"
+              onChange={handleFileChange}
+            />
           </label>
           {errors.imageBase64 && (
             <p className="hook-form_error" role="alert">
