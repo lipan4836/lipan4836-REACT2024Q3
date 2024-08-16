@@ -1,16 +1,16 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import '../../styles/Form.scss';
-import Checkbox from './Checkbox';
-import RadioGroup from './RadioGroup';
-import TextInput from './TextInput';
-import FileUpload from './FileUpload';
+import Checkbox from '../inputs/Checkbox';
+import RadioGroup from '../inputs/RadioGroup';
+import TextInput from '../inputs/TextInput';
+import FileUpload from '../inputs/FileUpload';
 import { FormValuesProps } from '../../types/formValuesProps';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFormData } from '../../store/slices/formSlice';
 import formValidationSchema from '../../utils/formValidation';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
-import CountryInput from './CountryInput';
+import CountryInput from '../inputs/CountryInput';
 import { useNavigate } from 'react-router-dom';
 
 function UnCtrlForm() {
