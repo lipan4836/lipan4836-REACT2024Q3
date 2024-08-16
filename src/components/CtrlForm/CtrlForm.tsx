@@ -1,18 +1,25 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm, SubmitHandler, Resolver } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { FormValuesProps } from '../../types/formValuesProps';
 import '../../styles/Form.scss';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { addFormData } from '../../store/slices/formSlice';
+import formValidationSchema from '../../utils/formValidation';
+
+const schema = formValidationSchema;
 
 export function CtrlForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const resolver: Resolver<FormValuesProps> = yupResolver(schema);
+
   const {
     register,
     handleSubmit,
     setValue,
+    watch,
     formState: { errors, isSubmitting },
   } = useForm<FormValuesProps>({
     defaultValues: {
@@ -26,7 +33,11 @@ export function CtrlForm() {
       country: '',
       imageBase64: '',
     },
+    resolver,
   });
+
+  const allFields = watch();
+  const isFormFilled = Object.values(allFields).every((value) => value !== '' && value !== false);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -49,7 +60,7 @@ export function CtrlForm() {
     <main className="main">
       <h2>Hook Form</h2>
 
-      <form className="hook-form" onSubmit={handleSubmit(onSubmit)}>
+      <form className="hook-form" onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="hook-form_wrap">
           <label className="hook-form_line">
             <span className="hook-form_line__label">Name</span>
@@ -60,7 +71,11 @@ export function CtrlForm() {
               type="text"
             />
           </label>
-          {errors.name && <p role="alert">{errors.name.message}</p>}
+          {errors.name && (
+            <p className="hook-form_error" role="alert">
+              {errors.name.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -73,7 +88,11 @@ export function CtrlForm() {
               type="text"
             />
           </label>
-          {errors.age && <p role="alert">{errors.age.message}</p>}
+          {errors.age && (
+            <p className="hook-form_error" role="alert">
+              {errors.age.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -86,7 +105,11 @@ export function CtrlForm() {
               type="email"
             />
           </label>
-          {errors.email && <p role="alert">{errors.email.message}</p>}
+          {errors.email && (
+            <p className="hook-form_error" role="alert">
+              {errors.email.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -99,7 +122,11 @@ export function CtrlForm() {
               type="password"
             />
           </label>
-          {errors.pass1 && <p role="alert">{errors.pass1.message}</p>}
+          {errors.pass1 && (
+            <p className="hook-form_error" role="alert">
+              {errors.pass1.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -112,7 +139,11 @@ export function CtrlForm() {
               type="password"
             />
           </label>
-          {errors.pass2 && <p role="alert">{errors.pass2.message}</p>}
+          {errors.pass2 && (
+            <p className="hook-form_error" role="alert">
+              {errors.pass2.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_line-gender">
@@ -132,7 +163,11 @@ export function CtrlForm() {
               <span className="hook-form_line-gender__inputs__label">{label}</span>
             </label>
           ))}
-          {errors.gender && <p role="alert">{errors.gender.message}</p>}
+          {errors.gender && (
+            <p className="hook-form_error" role="alert">
+              {errors.gender.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -140,7 +175,11 @@ export function CtrlForm() {
             <span className="hook-form_line__label">I agree to the terms and conditions</span>
             <input className="hook-form_line__input" type="checkbox" {...register('agreement')} />
           </label>
-          {errors.agreement && <p role="alert">{errors.agreement.message}</p>}
+          {errors.agreement && (
+            <p className="hook-form_error" role="alert">
+              {errors.agreement.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -148,7 +187,11 @@ export function CtrlForm() {
             <span className="hook-form_line__label">Upload Image</span>
             <input className="hook-form_line__input" type="file" onChange={handleFileChange} />
           </label>
-          {errors.imageBase64 && <p role="alert">{errors.imageBase64.message}</p>}
+          {errors.imageBase64 && (
+            <p className="hook-form_error" role="alert">
+              {errors.imageBase64.message}
+            </p>
+          )}
         </div>
 
         <div className="hook-form_wrap">
@@ -161,10 +204,14 @@ export function CtrlForm() {
               type="text"
             />
           </label>
-          {errors.country && <p role="alert">{errors.country.message}</p>}
+          {errors.country && (
+            <p className="hook-form_error" role="alert">
+              {errors.country.message}
+            </p>
+          )}
         </div>
 
-        <button type="submit" disabled={isSubmitting}>
+        <button type="submit" disabled={!isFormFilled || isSubmitting}>
           Submit
         </button>
       </form>

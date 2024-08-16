@@ -23,8 +23,8 @@ function UnCtrlForm() {
   const fileRef = useRef<HTMLInputElement>(null);
   const countryRef = useRef<HTMLInputElement>(null);
 
-  const [imageBase64, setImageBase64] = useState<string | null>(null);
-  const [gender, setGender] = useState<string | null>(null);
+  const [imageBase64, setImageBase64] = useState<string>('');
+  const [gender, setGender] = useState<string>('');
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isFormComplete, setIsFormComplete] = useState<boolean>(false);
 

@@ -50,12 +50,24 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 26px;
+  gap: 27px;
   max-width: 768px;
   min-width: 450px;
 
   .hook-form_wrap {
     width: 100%;
+    position: relative;
+  }
+
+  &_error {
+    font-size: 10px;
+    position: absolute;
+    top: 34px;
+    line-height: 1;
+    color: #baf162;
+    background-color: #f13939;
+    padding: 2px 8px;
+    border-radius: 5px;
   }
 
   .hook-form_line {
@@ -72,7 +84,7 @@
       line-height: 1.15;
       font-family: inherit;
       font-size: 100%;
-      padding: 6px;
+      padding: 5px;
     }
   }
 

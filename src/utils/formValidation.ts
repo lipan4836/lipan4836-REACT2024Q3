@@ -7,7 +7,8 @@ const formValidationSchema = Yup.object().shape({
     .required('Name is required'),
   age: Yup.string()
     .strict(true)
-    .matches(/^[1-9][0-9]*$/, 'Enter positive digits'),
+    .matches(/^[1-9][0-9]*$/, 'Enter positive digits')
+    .required('Name is required'),
   email: Yup.string()
     .strict(true)
     .matches(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Invalid email format')

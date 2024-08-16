@@ -6,6 +6,6 @@ export type FormValuesProps = {
   pass2: string;
   agreement: boolean;
   country: string;
-  gender: string | null;
-  imageBase64: string | null;
+  gender: string;
+  imageBase64: string;
 };
