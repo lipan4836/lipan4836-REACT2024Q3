@@ -8,6 +8,7 @@ import UnCtrlForm from './components/UnCtrlForm/UnCtrlForm.tsx';
 import CtrlForm from './components/CtrlForm/CtrlForm.tsx';
 import { Provider } from 'react-redux';
 import store from './store/store.ts';
+import Page404 from './components/404/Page404.tsx';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
       {
         path: '/ctrl',
         element: <CtrlForm />,
+      },
+      {
+        path: '*',
+        element: <Page404 />,
       },
     ],
   },
