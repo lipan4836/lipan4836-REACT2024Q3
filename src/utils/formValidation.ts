@@ -1,5 +1,8 @@
 import * as Yup from 'yup';
 
+const SUPPORTED_FORMATS = ['image/jpg', 'image/jpeg', 'image/png'];
+const FILE_SIZE_LIMIT = 2 * 1024 * 1024;
+
 const formValidationSchema = Yup.object().shape({
   name: Yup.string()
     .strict(true)
@@ -31,7 +34,25 @@ const formValidationSchema = Yup.object().shape({
     .strict(true)
     .matches(/^[A-Z][a-zA-Z]*$/, 'Country must start with a capital letter')
     .required('Name is required'),
-  imageBase64: Yup.string().required('Image is required'),
+  imageBase64: Yup.string()
+    .required('Image is required')
+    .test('fileFormat', 'Unsupported file format', (value) => {
+      if (value) {
+        const isValidFormat = SUPPORTED_FORMATS.some((format) =>
+          value.startsWith(`data:${format}`),
+        );
+        return isValidFormat;
+      }
+      return true;
+    })
+    .test('fileSize', 'File too large', (value) => {
+      if (value) {
+        const stringLength = value.length - 'data:image/jpeg;base64,'.length;
+        const sizeInBytes = (stringLength * 3) / 4;
+        return sizeInBytes <= FILE_SIZE_LIMIT;
+      }
+      return true;
+    }),
 });
 
 export default formValidationSchema;

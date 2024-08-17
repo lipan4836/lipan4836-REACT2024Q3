@@ -1,4 +1,4 @@
-import { useForm, SubmitHandler, Resolver } from 'react-hook-form';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { FormValuesProps } from '../../types/formValuesProps';
 import '../../styles/Form.scss';
@@ -10,13 +10,9 @@ import GoBackBtn from '../GoBackBtn/GoBackBtn';
 import { RootState } from '../../store/store';
 import { useState } from 'react';
 
-const schema = formValidationSchema;
-
 export function CtrlForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const resolver: Resolver<FormValuesProps> = yupResolver(schema);
 
   const {
     register,
@@ -36,7 +32,8 @@ export function CtrlForm() {
       country: '',
       imageBase64: '',
     },
-    resolver,
+    resolver: yupResolver(formValidationSchema),
+    mode: 'onChange',
   });
 
   const allFields = watch();

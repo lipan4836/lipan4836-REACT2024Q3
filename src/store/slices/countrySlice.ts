@@ -18,7 +18,6 @@ const initialState: CountryState = {
     'Spain',
     'Japan',
     'Australia',
-    'China',
     'India',
     'Brazil',
     'Mexico',
