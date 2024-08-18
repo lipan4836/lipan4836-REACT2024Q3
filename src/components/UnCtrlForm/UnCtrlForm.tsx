@@ -7,7 +7,7 @@ import FileUpload from '../inputs/FileUpload';
 import { FormValuesProps } from '../../types/formValuesProps';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFormData } from '../../store/slices/formSlice';
-import formValidationSchema from '../../utils/formValidation';
+import createValidationSchema from '../../utils/formValidation';
 import * as Yup from 'yup';
 import { RootState } from '../../store/store';
 import CountryInput from '../inputs/CountryInput';
@@ -34,6 +34,8 @@ function UnCtrlForm() {
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const validationSchema = createValidationSchema(countries);
 
   const checkFormCompleteness = useCallback(() => {
     const isComplete =
@@ -159,9 +161,8 @@ function UnCtrlForm() {
     };
 
     try {
-      await formValidationSchema.validate(formValues, { abortEarly: false });
+      await validationSchema.validate(formValues, { abortEarly: false });
       setErrors({});
-      console.log('Validated form values:', formValues);
       dispatch(addFormData(formValues));
       navigate('/');
     } catch (err) {

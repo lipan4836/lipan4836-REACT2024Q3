@@ -5,7 +5,7 @@ import '../../styles/Form.scss';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { addFormData } from '../../store/slices/formSlice';
-import formValidationSchema from '../../utils/formValidation';
+import createValidationSchema from '../../utils/formValidation';
 import GoBackBtn from '../GoBackBtn/GoBackBtn';
 import { RootState } from '../../store/store';
 import { useState } from 'react';
@@ -13,6 +13,9 @@ import { useState } from 'react';
 export function CtrlForm() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const countries = useSelector((state: RootState) => state.countries.list);
+  const validationSchema = createValidationSchema(countries);
 
   const {
     register,
@@ -32,14 +35,13 @@ export function CtrlForm() {
       country: '',
       imageBase64: '',
     },
-    resolver: yupResolver(formValidationSchema),
+    resolver: yupResolver(validationSchema),
     mode: 'onChange',
   });
 
   const allFields = watch();
   const isFormFilled = Object.values(allFields).every((value) => value !== '' && value !== false);
 
-  const countries = useSelector((state: RootState) => state.countries.list);
   const [filteredCountries, setFilteredCountries] = useState<string[]>([]);
   const [countryInput, setCountryInput] = useState<string>('');
 
